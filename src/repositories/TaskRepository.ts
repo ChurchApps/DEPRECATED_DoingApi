@@ -13,7 +13,7 @@ export class TaskRepository {
   private async create(task: Task) {
     task.id = UniqueIdHelper.shortId();
 
-    const taskNumber = this.loadNextTaskNumber(task.churchId);
+    const taskNumber = await this.loadNextTaskNumber(task.churchId);
     const sql = "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, createdByType, createdById, assignedToType, assignedToId, title, status) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     const params = [task.id, task.churchId, taskNumber, task.taskType, task.dateClosed, task.associatedWithType, task.associatedWithId, task.createdByType, task.createdById, task.assignedToType, task.assignedToId, task.title, task.status];
     await DB.query(sql, params);
