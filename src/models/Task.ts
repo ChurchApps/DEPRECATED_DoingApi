@@ -6,10 +6,13 @@ export class Task {
   public dateClosed?: Date;
   public associatedWithType?: string;
   public associatedWithId?: string;
+  public associatedWithLabel?: string;
   public createdByType?: string;
   public createdById?: string;
+  public createdByLabel?: string;
   public assignedToType?: string;
   public assignedToId?: string;
+  public assignedToLabel?: string;
   public title?: string;
   public status?: string;
 }

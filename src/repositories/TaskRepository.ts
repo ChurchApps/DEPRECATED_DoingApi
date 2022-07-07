@@ -14,15 +14,15 @@ export class TaskRepository {
     task.id = UniqueIdHelper.shortId();
 
     const taskNumber = await this.loadNextTaskNumber(task.churchId);
-    const sql = "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, createdByType, createdById, assignedToType, assignedToId, title, status) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    const params = [task.id, task.churchId, taskNumber, task.taskType, task.dateClosed, task.associatedWithType, task.associatedWithId, task.createdByType, task.createdById, task.assignedToType, task.assignedToId, task.title, task.status];
+    const sql = "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    const params = [task.id, task.churchId, taskNumber, task.taskType, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status];
     await DB.query(sql, params);
     return task;
   }
 
   private async update(task: Task) {
-    const sql = "UPDATE tasks SET taskType=?, dateCreated=?, dateClosed=?, associatedWithType=?, associatedWithId=?, createdByType=?, createdById=?, assignedToType=?, assignedToId=?, title=?, status=? WHERE id=? and churchId=?";
-    const params = [task.taskType, task.dateCreated, task.dateClosed, task.associatedWithType, task.associatedWithId, task.createdByType, task.createdById, task.assignedToType, task.assignedToId, task.title, task.status, task.id, task.churchId];
+    const sql = "UPDATE tasks SET taskType=?, dateCreated=?, dateClosed=?, associatedWithType=?, associatedWithId=?, associatedWithLabel=?, createdByType=?, createdById=?, createdByLabel=?, assignedToType=?, assignedToId=?, assignedToLabel=?, title=?, status=? WHERE id=? and churchId=?";
+    const params = [task.taskType, task.dateCreated, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status, task.id, task.churchId];
     await DB.query(sql, params);
     return task;
   }
@@ -36,8 +36,8 @@ export class TaskRepository {
   }
 
   private async loadNextTaskNumber(churchId: string) {
-    const result = await DB.queryOne("select max(ifnull(taskNumber, 0)) + 1 from tasks where churchId=?", [churchId]);
-    return result[0];
+    const result = await DB.queryOne("select max(ifnull(taskNumber, 0)) + 1 as taskNumber from tasks where churchId=?", [churchId]);
+    return result.taskNumber;
   }
 
   public loadForPerson(churchId: string, personId: string, status: string) {
