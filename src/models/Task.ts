@@ -11,5 +11,5 @@ export class Task {
   public assignedToType?: string;
   public assignedToId?: string;
   public title?: string;
-  public details?: string;
+  public status?: string;
 }

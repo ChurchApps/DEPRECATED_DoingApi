@@ -1,4 +1,4 @@
-import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
+import { controller, httpPost, httpGet, interfaces, requestParam } from "inversify-express-utils";
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController"
 import { Task } from "../models"
@@ -6,10 +6,24 @@ import { Task } from "../models"
 @controller("/tasks")
 export class TaskController extends DoingBaseController {
 
+  @httpGet("/closed")
+  public async getForPersonClosed(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.task.loadForPerson(au.churchId, au.personId, "Closed");
+    });
+  }
+
   @httpGet("/:id")
   public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.task.load(au.churchId, id);
+    });
+  }
+
+  @httpGet("/")
+  public async getForPerson(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.task.loadForPerson(au.churchId, au.personId, "Open");
     });
   }
 

@@ -6,10 +6,10 @@ import { DBCreator } from "../src/apiBase/tools/DBCreator"
 
 const init = async () => {
   dotenv.config();
-  Environment.init(process.env.APP_ENV);
+  Environment.init(process.env.APP_ENV?.toString() || "");
   console.log("Connecting");
   Pool.initPool();
-  await DBCreator.init(["Links", "Pages"])
+  await DBCreator.init(["Notes"])
 };
 
 init()
