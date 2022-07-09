@@ -44,9 +44,13 @@ export class TaskRepository {
     return DB.query("SELECT * FROM tasks WHERE churchId=? AND ((assignedToType='person' AND assignedToId=?) OR (createdByType='person' AND createdById=?)) and status=?;", [churchId, personId, personId, status]);
   }
 
+  public async loadForGroups(churchId: string, groupIds: string[], status: string) {
+    if (groupIds.length === 0) return []
+    else return DB.query("SELECT * FROM tasks WHERE churchId=? AND ((assignedToType='group' AND assignedToId IN (?)) OR (createdByType='group' AND createdById IN (?))) AND status=?;", [churchId, groupIds, groupIds, status]);
+  }
+
   public loadAll(churchId: string) {
     return DB.query("SELECT * FROM tasks WHERE churchId=?;", [churchId]);
   }
-
 
 }

@@ -27,6 +27,13 @@ export class TaskController extends DoingBaseController {
     });
   }
 
+  @httpPost("/loadForGroups")
+  public async loadForGroups(req: express.Request<{}, {}, { groupIds: string[], status: string }>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.task.loadForGroups(au.churchId, req.body.groupIds, req.body.status);
+    });
+  }
+
   @httpPost("/")
   public async save(req: express.Request<{}, {}, Task[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
