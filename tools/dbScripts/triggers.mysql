@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS `triggers`;
+
+CREATE TABLE `triggers` (
+  `id` char(11) NOT NULL,
+  `churchId` char(11) DEFAULT NULL,
+  `automationId` char(11) DEFAULT NULL,
+  `field` varchar(45) DEFAULT NULL,
+  `fieldData` text,
+  `operator` varchar(45) DEFAULT NULL,
+  `value` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

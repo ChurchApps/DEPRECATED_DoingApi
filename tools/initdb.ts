@@ -11,7 +11,10 @@ const init = async () => {
   Pool.initPool();
 
   const taskTables: { title: string, file: string }[] = [
-    { title: "Tasks", file: "tasks.mysql" }
+    { title: "Actions", file: "actions.mysql" },
+    { title: "Automations", file: "automations.mysql" },
+    { title: "Tasks", file: "tasks.mysql" },
+    { title: "Triggers", file: "triggers.mysql" }
   ]
 
   await DBCreator.init(["Notes"]);
