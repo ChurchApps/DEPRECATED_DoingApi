@@ -1,5 +1,5 @@
 export { ActionRepository } from "./ActionRepository";
 export { AutomationRepository } from "./AutomationRepository";
 export { TaskRepository } from "./TaskRepository";
-export { TriggerRepository } from "./TriggerRepository";
+export { ConditionRepository } from "./ConditionRepository";
 export { Repositories } from "./Repositories";

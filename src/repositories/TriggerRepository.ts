@@ -1,41 +1,41 @@
 import { injectable } from "inversify";
 import { UniqueIdHelper } from "../apiBase"
 import { DB } from "../apiBase/db"
-import { Trigger } from "../models";
+import { Condition } from "../models";
 
 @injectable()
-export class TriggerRepository {
+export class ConditionRepository {
 
-  public save(trigger: Trigger) {
-    return trigger.id ? this.update(trigger) : this.create(trigger);
+  public save(condition: Condition) {
+    return condition.id ? this.update(condition) : this.create(condition);
   }
 
-  private async create(trigger: Trigger) {
-    trigger.id = UniqueIdHelper.shortId();
+  private async create(condition: Condition) {
+    condition.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO triggers (id, churchId, automationId, field, fieldData, operator, value) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    const params = [trigger.id, trigger.churchId, trigger.automationId, trigger.field, trigger.fieldData, trigger.operator, trigger.value];
+    const sql = "INSERT INTO conditions (id, churchId, conditionGroupId, field, fieldData, operator, value) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const params = [condition.id, condition.churchId, condition.conditionGroupId, condition.field, condition.fieldData, condition.operator, condition.value];
     await DB.query(sql, params);
-    return trigger;
+    return condition;
   }
 
-  private async update(trigger: Trigger) {
-    const sql = "UPDATE triggers SET automationId=?, field=?, fieldData=?, operator=?, value=? WHERE id=? and churchId=?";
-    const params = [trigger.automationId, trigger.field, trigger.fieldData, trigger.operator, trigger.value, trigger.id, trigger.churchId];
+  private async update(condition: Condition) {
+    const sql = "UPDATE conditions SET conditionGroupId=?, field=?, fieldData=?, operator=?, value=? WHERE id=? and churchId=?";
+    const params = [condition.conditionGroupId, condition.field, condition.fieldData, condition.operator, condition.value, condition.id, condition.churchId];
     await DB.query(sql, params);
-    return trigger;
+    return condition;
   }
 
   public delete(churchId: string, id: string) {
-    return DB.query("DELETE FROM triggers WHERE id=? AND churchId=?;", [id, churchId]);
+    return DB.query("DELETE FROM conditions WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
   public load(churchId: string, id: string) {
-    return DB.queryOne("SELECT * FROM triggers WHERE id=? AND churchId=?;", [id, churchId]);
+    return DB.queryOne("SELECT * FROM conditions WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
   public loadForAutomation(churchId: string, automationId: string) {
-    return DB.query("SELECT * FROM triggers WHERE automationId=? AND churchId=?;", [automationId, churchId]);
+    return DB.query("SELECT * FROM conditions WHERE conditionGroupId IN (SELECT id FROM conditionGroups WHERE automationId=?) AND churchId=?;", [automationId, churchId]);
   }
 
 }

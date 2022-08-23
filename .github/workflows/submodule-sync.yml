@@ -36,7 +36,7 @@ jobs:
         git commit -am "Auto updated submodule references" && git push || echo "No changes to commit"
         
     
-    - name: Trigger Deploy
+    - name: Condition Deploy
       env:
         CI_TOKEN: ${{ secrets.CI_TOKEN }}
         PARENT_REPO: LiveChurchSolutions/DoingApi

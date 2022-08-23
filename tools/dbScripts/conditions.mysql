@@ -1,12 +1,13 @@
-DROP TABLE IF EXISTS `triggers`;
+DROP TABLE IF EXISTS `conditions`;
 
-CREATE TABLE `triggers` (
+CREATE TABLE `conditions` (
   `id` char(11) NOT NULL,
   `churchId` char(11) DEFAULT NULL,
-  `automationId` char(11) DEFAULT NULL,
+  `conditionGroupId` char(11) DEFAULT NULL,
   `field` varchar(45) DEFAULT NULL,
   `fieldData` text,
   `operator` varchar(45) DEFAULT NULL,
   `value` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+

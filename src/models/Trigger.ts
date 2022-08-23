@@ -1,7 +1,7 @@
-export class Trigger {
+export class Condition {
   public id?: string;
   public churchId?: string;
-  public automationId?: string;
+  public conditionGroupId?: string;
   public field?: Date;
   public fieldData?: Date;
   public operator?: string;
