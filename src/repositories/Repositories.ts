@@ -1,15 +1,17 @@
 import {
   ActionRepository,
   AutomationRepository,
-  TaskRepository,
   ConditionRepository,
+  ConditionGroupRepository,
+  TaskRepository
 } from ".";
 
 export class Repositories {
   public action: ActionRepository;
   public automation: AutomationRepository;
-  public task: TaskRepository;
   public condition: ConditionRepository;
+  public conditionGroup: ConditionGroupRepository;
+  public task: TaskRepository;
 
   private static _current: Repositories = null;
   public static getCurrent = () => {
@@ -20,7 +22,8 @@ export class Repositories {
   constructor() {
     this.action = new ActionRepository();
     this.automation = new AutomationRepository();
-    this.task = new TaskRepository();
     this.condition = new ConditionRepository();
+    this.conditionGroup = new ConditionGroupRepository();
+    this.task = new TaskRepository();
   }
 }
