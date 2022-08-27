@@ -20,7 +20,7 @@ export class AutomationRepository {
   }
 
   private async update(automation: Automation) {
-    const sql = "UPDATE automations SET title=?, active=?, automationData=? WHERE id=? and churchId=?";
+    const sql = "UPDATE automations SET title=?, active=? WHERE id=? and churchId=?";
     const params = [automation.title, automation.active, automation.id, automation.churchId];
     await DB.query(sql, params);
     return automation;

@@ -2,7 +2,7 @@ import {
   ActionRepository,
   AutomationRepository,
   ConditionRepository,
-  ConditionGroupRepository,
+  ConjunctionRepository,
   TaskRepository
 } from ".";
 
@@ -10,7 +10,7 @@ export class Repositories {
   public action: ActionRepository;
   public automation: AutomationRepository;
   public condition: ConditionRepository;
-  public conditionGroup: ConditionGroupRepository;
+  public conjunction: ConjunctionRepository;
   public task: TaskRepository;
 
   private static _current: Repositories = null;
@@ -23,7 +23,7 @@ export class Repositories {
     this.action = new ActionRepository();
     this.automation = new AutomationRepository();
     this.condition = new ConditionRepository();
-    this.conditionGroup = new ConditionGroupRepository();
+    this.conjunction = new ConjunctionRepository();
     this.task = new TaskRepository();
   }
 }

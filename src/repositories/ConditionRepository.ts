@@ -13,15 +13,15 @@ export class ConditionRepository {
   private async create(condition: Condition) {
     condition.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO conditions (id, churchId, conditionGroupId, field, fieldData, operator, value) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    const params = [condition.id, condition.churchId, condition.conditionGroupId, condition.field, condition.fieldData, condition.operator, condition.value];
+    const sql = "INSERT INTO conditions (id, churchId, conjunctionId, field, fieldData, operator, value) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const params = [condition.id, condition.churchId, condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value];
     await DB.query(sql, params);
     return condition;
   }
 
   private async update(condition: Condition) {
-    const sql = "UPDATE conditions SET conditionGroupId=?, field=?, fieldData=?, operator=?, value=? WHERE id=? and churchId=?";
-    const params = [condition.conditionGroupId, condition.field, condition.fieldData, condition.operator, condition.value, condition.id, condition.churchId];
+    const sql = "UPDATE conditions SET conjunctionId=?, field=?, fieldData=?, operator=?, value=? WHERE id=? and churchId=?";
+    const params = [condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value, condition.id, condition.churchId];
     await DB.query(sql, params);
     return condition;
   }
@@ -35,7 +35,7 @@ export class ConditionRepository {
   }
 
   public loadForAutomation(churchId: string, automationId: string) {
-    return DB.query("SELECT * FROM conditions WHERE conditionGroupId IN (SELECT id FROM conditionGroups WHERE automationId=?) AND churchId=?;", [automationId, churchId]);
+    return DB.query("SELECT * FROM conditions WHERE conjunctionId IN (SELECT id FROM conjunctions WHERE automationId=?) AND churchId=?;", [automationId, churchId]);
   }
 
 }

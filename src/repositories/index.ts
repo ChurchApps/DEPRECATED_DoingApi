@@ -1,6 +1,6 @@
 export { ActionRepository } from "./ActionRepository";
 export { AutomationRepository } from "./AutomationRepository";
 export { ConditionRepository } from "./ConditionRepository";
-export { ConditionGroupRepository } from "./ConditionGroupRepository";
+export { ConjunctionRepository } from "./ConjunctionRepository";
 export { Repositories } from "./Repositories";
 export { TaskRepository } from "./TaskRepository";

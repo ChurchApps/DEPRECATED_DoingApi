@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS `conditions`;
 CREATE TABLE `conditions` (
   `id` char(11) NOT NULL,
   `churchId` char(11) DEFAULT NULL,
-  `conditionGroupId` char(11) DEFAULT NULL,
+  `conjunctionId` char(11) DEFAULT NULL,
   `field` varchar(45) DEFAULT NULL,
   `fieldData` text,
   `operator` varchar(45) DEFAULT NULL,
