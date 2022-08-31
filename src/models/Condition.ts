@@ -6,4 +6,5 @@ export class Condition {
   public fieldData?: Date;
   public operator?: string;
   public value?: string;
+  public label?: string;
 }

@@ -35,7 +35,7 @@ export class ConjunctionRepository {
   }
 
   public loadForAutomation(churchId: string, automationId: string) {
-    return DB.query("SELECT * FROM conjunctions WHERE conjunctionGroupId IN (SELECT id FROM conjunctionGroups WHERE automationId=?) AND churchId=?;", [automationId, churchId]);
+    return DB.query("SELECT * FROM conjunctions WHERE automationId=? AND churchId=?;", [automationId, churchId]);
   }
 
 }

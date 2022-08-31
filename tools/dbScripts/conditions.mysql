@@ -8,6 +8,8 @@ CREATE TABLE `conditions` (
   `fieldData` text,
   `operator` varchar(45) DEFAULT NULL,
   `value` varchar(45) DEFAULT NULL,
+  `label` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 

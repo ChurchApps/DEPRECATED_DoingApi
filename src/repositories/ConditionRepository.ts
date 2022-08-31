@@ -13,15 +13,15 @@ export class ConditionRepository {
   private async create(condition: Condition) {
     condition.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO conditions (id, churchId, conjunctionId, field, fieldData, operator, value) VALUES (?, ?, ?, ?, ?, ?, ?);";
-    const params = [condition.id, condition.churchId, condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value];
+    const sql = "INSERT INTO conditions (id, churchId, conjunctionId, field, fieldData, operator, value, label) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    const params = [condition.id, condition.churchId, condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value, condition.label];
     await DB.query(sql, params);
     return condition;
   }
 
   private async update(condition: Condition) {
     const sql = "UPDATE conditions SET conjunctionId=?, field=?, fieldData=?, operator=?, value=? WHERE id=? and churchId=?";
-    const params = [condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value, condition.id, condition.churchId];
+    const params = [condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value, condition.label, condition.id, condition.churchId];
     await DB.query(sql, params);
     return condition;
   }

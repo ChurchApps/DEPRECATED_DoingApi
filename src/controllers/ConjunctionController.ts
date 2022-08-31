@@ -3,7 +3,7 @@ import express from "express";
 import { DoingBaseController } from "./DoingBaseController"
 import { Conjunction } from "../models"
 
-@controller("/conjunction")
+@controller("/conjunctions")
 export class ConjunctionController extends DoingBaseController {
 
   @httpGet("/:id")
