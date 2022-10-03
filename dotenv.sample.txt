@@ -2,6 +2,7 @@ APP_ENV=dev
 NO_NOTES_PERMISSION=true
 # sample connection - mysql://user:password@host:port/dbName
 CONNECTION_STRING=mysql://
+CONNECTION_STRING_MEMBERSHIP=mysql://USERNAME:PASSWORD@SERVER:3306/membership
 ENCRYPTION_KEY=aSecretKeyOfExactly192BitsLength
 JWT_SECRET=this is a test key that is a sentence
 SERVER_PORT=8088

@@ -3,7 +3,8 @@ import {
   AutomationRepository,
   ConditionRepository,
   ConjunctionRepository,
-  TaskRepository
+  TaskRepository,
+  MembershipRepository
 } from ".";
 
 export class Repositories {
@@ -12,6 +13,8 @@ export class Repositories {
   public condition: ConditionRepository;
   public conjunction: ConjunctionRepository;
   public task: TaskRepository;
+
+  public membershipRepository: MembershipRepository;
 
   private static _current: Repositories = null;
   public static getCurrent = () => {
@@ -25,5 +28,7 @@ export class Repositories {
     this.condition = new ConditionRepository();
     this.conjunction = new ConjunctionRepository();
     this.task = new TaskRepository();
+
+    this.membershipRepository = new MembershipRepository();
   }
 }
