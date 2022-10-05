@@ -14,7 +14,7 @@ export class Repositories {
   public conjunction: ConjunctionRepository;
   public task: TaskRepository;
 
-  public membershipRepository: MembershipRepository;
+  public membership: MembershipRepository;
 
   private static _current: Repositories = null;
   public static getCurrent = () => {
@@ -29,6 +29,6 @@ export class Repositories {
     this.conjunction = new ConjunctionRepository();
     this.task = new TaskRepository();
 
-    this.membershipRepository = new MembershipRepository();
+    this.membership = new MembershipRepository();
   }
 }
