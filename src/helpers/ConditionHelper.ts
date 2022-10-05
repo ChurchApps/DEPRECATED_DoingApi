@@ -9,6 +9,7 @@ export class ConditionHelper {
     const promises: Promise<Condition>[] = [];
     conditions.forEach(c => promises.push(ConditionHelper.getPeopleIdsMatchingCondition(c)))
     const result = await Promise.all(promises);
+    return result;
   }
 
 
@@ -32,7 +33,7 @@ export class ConditionHelper {
     switch (condition.field) {
       case "dayOfMonth":
         const dom = new Date().getDate();
-        result = ConditionHelper.evalNum(dom, condition.operator, parseInt(condition.value));
+        result = ConditionHelper.evalNum(dom, condition.operator, parseInt(condition.value, 0));
         break;
     }
     return result;

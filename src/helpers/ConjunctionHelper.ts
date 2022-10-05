@@ -6,22 +6,24 @@ import { ConditionHelper } from "./ConditionHelper";
 
 export class ConjunctionHelper {
 
-  public static async checkAutomation(automation: Automation) {
+  public static async getPeopleIds(automation: Automation) {
     const conjunctions = await Repositories.getCurrent().conjunction.loadForAutomation(automation.churchId, automation.id);
     let conditions = await Repositories.getCurrent().condition.loadForAutomation(automation.churchId, automation.id);
     conditions = await ConditionHelper.getPeopleIdsMatchingConditions(conditions);
     const tree = this.buildTree(conjunctions, conditions);
     const peopleIds = this.getPeopleFromTree(tree);
+    return peopleIds;
   }
 
   public static buildTree(allConjunctions: Conjunction[], allConditions: Condition[]) {
+    allConjunctions.forEach(ac => { if (ac.parentId === null) ac.parentId = "" });
     const root: Conjunction = ArrayHelper.getOne(allConjunctions, "parentId", "");
     this.buildTreeLevel(allConjunctions, allConditions, root);
     return root;
   }
 
   private static buildTreeLevel(allConjunctions: Conjunction[], allConditions: Condition[], parent: Conjunction) {
-    parent.conjunctions = ArrayHelper.getAll(allConditions, "parentId", parent.id);
+    parent.conjunctions = ArrayHelper.getAll(allConjunctions, "parentId", parent.id);
     parent.conditions = ArrayHelper.getAll(allConditions, "conjunctionId", parent.id);
     parent.conjunctions.forEach(c => { this.buildTreeLevel(allConjunctions, allConditions, c); });
   }
@@ -38,8 +40,10 @@ export class ConjunctionHelper {
     } else {
       peopleArrays.forEach(pa => {
         let allPeople = true;
+        let noPeople = false;
         if (pa.length !== 1 || pa[0] === "*") {
           allPeople = false;
+          if (pa.length === 0) noPeople = true;
           if (result.length === 0) result = pa;
           else {
             for (let i = result.length - 1; i >= 0; i++) {
@@ -49,6 +53,7 @@ export class ConjunctionHelper {
           }
         }
         if (allPeople) result = ["*"];
+        else if (noPeople) result = [];
       });
     }
     parent.matchingIds = result;

@@ -5,12 +5,16 @@ import { Condition } from "../models";
 @injectable()
 export class MembershipRepository {
 
-  public loadIdsMatchingCondition(condition: Condition) {
-    let sql = "select id from people where churchId=? AND ";
+  public async loadIdsMatchingCondition(condition: Condition) {
+    let sql = "select id from people where churchId = ? AND ";
     const params = [condition.churchId];
     sql += condition.field + " " + condition.operator + " ?";
+    params.push(condition.value)
 
-    return DBHelper.query("membership", sql, []);
+    const result: string[] = []
+    const rows = await DBHelper.query("membership", sql, params);
+    rows.forEach((r: any) => result.push(r.id));
+    return result;
   }
 
 
