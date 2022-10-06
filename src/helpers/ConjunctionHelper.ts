@@ -41,7 +41,7 @@ export class ConjunctionHelper {
       peopleArrays.forEach(pa => {
         let allPeople = true;
         let noPeople = false;
-        if (pa.length !== 1 || pa[0] === "*") {
+        if (pa.length !== 1 || pa[0] !== "*") {
           allPeople = false;
           if (pa.length === 0) noPeople = true;
           if (result.length === 0) result = pa;
