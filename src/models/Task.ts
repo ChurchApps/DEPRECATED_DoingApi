@@ -15,4 +15,5 @@ export class Task {
   public assignedToLabel?: string;
   public title?: string;
   public status?: string;
+  public automationId?: string;
 }

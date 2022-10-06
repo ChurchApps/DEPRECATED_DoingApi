@@ -2,7 +2,7 @@ import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } f
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController"
 import { Automation } from "../models"
-import { ConjunctionHelper } from "../helpers";
+import { AutomationHelper } from "../helpers/AutomationHelper";
 
 @controller("/automations")
 export class AutomationController extends DoingBaseController {
@@ -10,8 +10,15 @@ export class AutomationController extends DoingBaseController {
   @httpGet("/check")
   public async tempCheck(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapperAnon(req, res, async () => {
-      const automation = await this.repositories.automation.load("AOjIt0W-SeY", "IWxCmJ0ohfb");
-      return await ConjunctionHelper.getPeopleIds(automation);
+      const automations: Automation[] = await this.repositories.automation.loadAll("AOjIt0W-SeY");
+      if (automations.length > 0) {
+        const promises: Promise<void>[] = [];
+        automations.forEach(a => {
+          promises.push(AutomationHelper.check(a));
+        });
+        await Promise.all(promises);
+      }
+      return { success: true }
     });
   }
 
