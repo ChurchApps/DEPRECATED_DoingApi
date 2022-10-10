@@ -10,14 +10,7 @@ export class AutomationController extends DoingBaseController {
   @httpGet("/check")
   public async tempCheck(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapperAnon(req, res, async () => {
-      const automations: Automation[] = await this.repositories.automation.loadAll("AOjIt0W-SeY");
-      if (automations.length > 0) {
-        const promises: Promise<void>[] = [];
-        automations.forEach(a => {
-          promises.push(AutomationHelper.check(a));
-        });
-        await Promise.all(promises);
-      }
+      await AutomationHelper.checkAll();
       return { success: true }
     });
   }

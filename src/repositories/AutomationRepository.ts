@@ -38,4 +38,8 @@ export class AutomationRepository {
     return DB.query("SELECT * FROM automations WHERE churchId=? ORDER BY title;", [churchId]);
   }
 
+  public loadAllChurches() {
+    return DB.query("SELECT * FROM automations;", []);
+  }
+
 }

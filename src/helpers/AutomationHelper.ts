@@ -5,6 +5,19 @@ import { Note } from "../apiBase/models";
 
 export class AutomationHelper {
 
+  public static async checkAll() {
+    const automations: Automation[] = await Repositories.getCurrent().automation.loadAllChurches();
+    if (automations.length > 0) {
+      for (const a of automations) {
+        try {
+          await AutomationHelper.check(a);
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    }
+  }
+
   public static async check(automation: Automation) {
     const triggeredPeopleIds = await ConjunctionHelper.getPeopleIds(automation);
     // if * load all peopele

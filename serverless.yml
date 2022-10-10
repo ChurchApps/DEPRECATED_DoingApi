@@ -13,7 +13,8 @@ functions:
     events:
       - http: ANY {proxy+}
       - http: ANY /
-
+  nightly:
+    handler: lambda.nightly
 
 plugins:
   - serverless-layers
