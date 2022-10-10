@@ -12,8 +12,8 @@ export class TaskRepository {
 
   private async create(task: Task) {
     task.id = UniqueIdHelper.shortId();
+    const taskNumber = await this.loadNextTaskNumber(task.churchId);  // NOTE - This is problematic if saving multiple records asyncronously.  Be sure to await each call
 
-    const taskNumber = await this.loadNextTaskNumber(task.churchId);
     const sql = "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status, automationId) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     const params = [task.id, task.churchId, taskNumber, task.taskType, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status, task.automationId];
     await DB.query(sql, params);

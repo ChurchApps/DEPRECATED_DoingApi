@@ -37,12 +37,11 @@ export class TaskController extends DoingBaseController {
   @httpPost("/")
   public async save(req: express.Request<{}, {}, Task[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
-      const promises: Promise<Task>[] = [];
-      req.body.forEach(task => {
+      const result: Task[] = []
+      for (const task of req.body) {
         task.churchId = au.churchId;
-        promises.push(this.repositories.task.save(task));
-      });
-      const result = await Promise.all(promises);
+        result.push(await this.repositories.task.save(task));
+      }
       return result;
     });
   }

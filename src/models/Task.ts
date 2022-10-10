@@ -2,6 +2,7 @@ export class Task {
   public id?: string;
   public churchId?: string;
   public taskType?: string;
+  public taskNumber?: number;
   public dateCreated?: Date;
   public dateClosed?: Date;
   public associatedWithType?: string;

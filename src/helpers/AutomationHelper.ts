@@ -29,8 +29,8 @@ export class AutomationHelper {
   }
 
   public static async createTasks(automation: Automation, people: { id: string, displayName: string }[], details: any) {
-    const promises: Promise<Task>[] = [];
-    people.forEach(p => {
+    const result: Task[] = [];
+    for (const p of people) {
       const task: Task = {
         churchId: automation.churchId,
         dateCreated: new Date(),
@@ -46,13 +46,17 @@ export class AutomationHelper {
         automationId: automation.id,
         title: details.title
       };
-      promises.push(Repositories.getCurrent().task.save(task).then(async (t: Task) => {
-        const note: Note = { contentType: "task", contentId: t.id, addedBy: t.assignedToId, contents: details.note };
-        await Repositories.getCurrent().note.save(note);
-        return t;
-      }));
-    });
-    await Promise.all(promises);
+
+      result.push(
+        await Repositories.getCurrent().task.save(task).then(async (t: Task) => {
+          const note: Note = { contentType: "task", contentId: t.id, addedBy: t.assignedToId, contents: details.note };
+          await Repositories.getCurrent().note.save(note);
+          return t;
+        })
+      );
+
+    }
+    return result;
   }
 
 
