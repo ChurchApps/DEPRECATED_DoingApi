@@ -20,7 +20,7 @@ export class ConditionRepository {
   }
 
   private async update(condition: Condition) {
-    const sql = "UPDATE conditions SET conjunctionId=?, field=?, fieldData=?, operator=?, value=? WHERE id=? and churchId=?";
+    const sql = "UPDATE conditions SET conjunctionId=?, field=?, fieldData=?, operator=?, value=?, label=? WHERE id=? and churchId=?";
     const params = [condition.conjunctionId, condition.field, condition.fieldData, condition.operator, condition.value, condition.label, condition.id, condition.churchId];
     await DB.query(sql, params);
     return condition;

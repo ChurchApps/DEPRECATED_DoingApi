@@ -20,7 +20,13 @@ export class ConditionHelper {
       case "membershipStatus":
         condition.matchingIds = await Repositories.getCurrent().membership.loadIdsMatchingCondition(condition);
         break;
+      case "maritalStatus":
+        condition.matchingIds = await Repositories.getCurrent().membership.loadIdsMatchingCondition(condition);
+        break;
       case "dayOfMonth":
+        condition.matchingIds = (this.evalSimpleCondition(condition)) ? ["*"] : [];
+        break;
+      case "dayOfWeek":
         condition.matchingIds = (this.evalSimpleCondition(condition)) ? ["*"] : [];
         break;
     }
@@ -34,6 +40,10 @@ export class ConditionHelper {
       case "dayOfMonth":
         const dom = new Date().getDate();
         result = ConditionHelper.evalNum(dom, condition.operator, parseInt(condition.value, 0));
+        break;
+      case "dayOfWeek":
+        const dow = new Date().getDay();
+        result = ConditionHelper.evalNum(dow, condition.operator, parseInt(condition.value, 0));
         break;
     }
     return result;
