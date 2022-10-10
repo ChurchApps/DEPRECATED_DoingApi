@@ -10,7 +10,7 @@ export class AutomationHelper {
     // if * load all peopele
 
     if (triggeredPeopleIds.length > 0) {
-      const existingTasks: Task[] = await Repositories.getCurrent().task.loadByAutomationIdContent(automation.churchId, automation.id, "person", triggeredPeopleIds);
+      const existingTasks: Task[] = await Repositories.getCurrent().task.loadByAutomationIdContent(automation.churchId, automation.id, automation.recurs, "person", triggeredPeopleIds);
       for (const t of existingTasks) {
         const idx = triggeredPeopleIds.indexOf(t.associatedWithId);
         if (idx > -1) triggeredPeopleIds.splice(idx, 1);

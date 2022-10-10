@@ -13,15 +13,15 @@ export class AutomationRepository {
   private async create(automation: Automation) {
     automation.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO automations (id, churchId, title, active) VALUES (?, ?, ?, ?);";
-    const params = [automation.id, automation.churchId, automation.title, automation.active];
+    const sql = "INSERT INTO automations (id, churchId, title, recurs, active) VALUES (?, ?, ?, ?, ?);";
+    const params = [automation.id, automation.churchId, automation.title, automation.recurs, automation.active];
     await DB.query(sql, params);
     return automation;
   }
 
   private async update(automation: Automation) {
-    const sql = "UPDATE automations SET title=?, active=? WHERE id=? and churchId=?";
-    const params = [automation.title, automation.active, automation.id, automation.churchId];
+    const sql = "UPDATE automations SET title=?, recurs=?, active=? WHERE id=? and churchId=?";
+    const params = [automation.title, automation.recurs, automation.active, automation.id, automation.churchId];
     await DB.query(sql, params);
     return automation;
   }
