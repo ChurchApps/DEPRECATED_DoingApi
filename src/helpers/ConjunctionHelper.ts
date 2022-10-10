@@ -46,7 +46,7 @@ export class ConjunctionHelper {
           if (pa.length === 0) noPeople = true;
           if (result.length === 0) result = pa;
           else {
-            for (let i = result.length - 1; i >= 0; i++) {
+            for (let i = result.length - 1; i >= 0; i--) {
               const id = result[i];
               if (pa.indexOf(id) === -1) result.splice(i, 1);
             }
