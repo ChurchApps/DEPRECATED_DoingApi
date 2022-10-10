@@ -26,7 +26,6 @@ export class AutomationHelper {
 
     }
 
-
   }
 
   public static async createTasks(automation: Automation, people: { id: string, displayName: string }[], details: any) {
