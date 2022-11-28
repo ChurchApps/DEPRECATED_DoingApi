@@ -19,5 +19,6 @@ CREATE TABLE `tasks` (
   `title` varchar(255) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
   `automationId` char(11) DEFAULT NULL,
+  `conversationId` char(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -14,15 +14,15 @@ export class TaskRepository {
     task.id = UniqueIdHelper.shortId();
     const taskNumber = await this.loadNextTaskNumber(task.churchId);  // NOTE - This is problematic if saving multiple records asyncronously.  Be sure to await each call
 
-    const sql = "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status, automationId) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    const params = [task.id, task.churchId, taskNumber, task.taskType, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status, task.automationId];
+    const sql = "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status, automationId, conversationId) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    const params = [task.id, task.churchId, taskNumber, task.taskType, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status, task.automationId, task.conversationId];
     await DB.query(sql, params);
     return task;
   }
 
   private async update(task: Task) {
-    const sql = "UPDATE tasks SET taskType=?, dateCreated=?, dateClosed=?, associatedWithType=?, associatedWithId=?, associatedWithLabel=?, createdByType=?, createdById=?, createdByLabel=?, assignedToType=?, assignedToId=?, assignedToLabel=?, title=?, status=?, automationId=? WHERE id=? and churchId=?";
-    const params = [task.taskType, task.dateCreated, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status, task.automationId, task.id, task.churchId];
+    const sql = "UPDATE tasks SET taskType=?, dateCreated=?, dateClosed=?, associatedWithType=?, associatedWithId=?, associatedWithLabel=?, createdByType=?, createdById=?, createdByLabel=?, assignedToType=?, assignedToId=?, assignedToLabel=?, title=?, status=?, automationId=?, conversationId=? WHERE id=? and churchId=?";
+    const params = [task.taskType, task.dateCreated, task.dateClosed, task.associatedWithType, task.associatedWithId, task.associatedWithLabel, task.createdByType, task.createdById, task.createdByLabel, task.assignedToType, task.assignedToId, task.assignedToLabel, task.title, task.status, task.automationId, task.conversationId, task.id, task.churchId];
     await DB.query(sql, params);
     return task;
   }
