@@ -17,7 +17,6 @@ const init = async () => {
     { title: "Conditions", file: "conditions.mysql" }
   ]
 
-  await DBCreator.init(["Notes"]);
   await initTables("Tasks", taskTables);
 };
 

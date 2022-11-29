@@ -6,7 +6,6 @@ import {
   TaskRepository,
   MembershipRepository
 } from ".";
-import { NoteRepository } from "../apiBase/repositories";
 
 export class Repositories {
   public action: ActionRepository;
@@ -14,7 +13,6 @@ export class Repositories {
   public condition: ConditionRepository;
   public conjunction: ConjunctionRepository;
   public task: TaskRepository;
-  public note: NoteRepository;
 
   public membership: MembershipRepository;
 
@@ -30,7 +28,6 @@ export class Repositories {
     this.condition = new ConditionRepository();
     this.conjunction = new ConjunctionRepository();
     this.task = new TaskRepository();
-    this.note = new NoteRepository();
 
     this.membership = new MembershipRepository();
   }

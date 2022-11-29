@@ -1,7 +1,6 @@
 import { Repositories } from "../repositories";
 import { Action, Automation, Task } from "../models";
 import { ConjunctionHelper } from "./ConjunctionHelper";
-import { Note } from "../apiBase/models";
 
 export class AutomationHelper {
 
@@ -62,8 +61,8 @@ export class AutomationHelper {
 
       result.push(
         await Repositories.getCurrent().task.save(task).then(async (t: Task) => {
-          const note: Note = { contentType: "task", contentId: t.id, addedBy: t.assignedToId, contents: details.note };
-          await Repositories.getCurrent().note.save(note);
+          // const note: Note = { contentType: "task", contentId: t.id, addedBy: t.assignedToId, contents: details.note };
+          // await Repositories.getCurrent().note.save(note);
           return t;
         })
       );
