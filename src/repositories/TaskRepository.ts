@@ -10,6 +10,20 @@ export class TaskRepository {
     return task.id ? this.update(task) : this.create(task);
   }
 
+  public async loadPosts(churchId: string, personId: string) {
+    const sql = "select 'task' as postType, id as postId, createdById as posterId, createdByLabel as posterName, title as message, conversationId from tasks"
+      + " where churchId=? AND status='Open' and ("
+      + "	(associatedWithType='person' and associatedWithId=?)"
+      + "    OR"
+      + "    (createdByType='person' and createdById=?)"
+      + "    OR"
+      + "    (assignedToType='person' and assignedToId=?)"
+      + ")";
+    const params = [churchId, personId, personId, personId];
+    const result = await DB.query(sql, params);
+    return result;
+  }
+
   private async create(task: Task) {
     task.id = UniqueIdHelper.shortId();
     const taskNumber = await this.loadNextTaskNumber(task.churchId);  // NOTE - This is problematic if saving multiple records asyncronously.  Be sure to await each call

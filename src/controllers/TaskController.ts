@@ -6,6 +6,13 @@ import { Task } from "../models"
 @controller("/tasks")
 export class TaskController extends DoingBaseController {
 
+  @httpGet("/posts")
+  public async getPosts(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.task.loadPosts(au.churchId, au.personId);
+    });
+  }
+
   @httpGet("/closed")
   public async getForPersonClosed(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
