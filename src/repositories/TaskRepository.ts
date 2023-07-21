@@ -10,16 +10,22 @@ export class TaskRepository {
     return task.id ? this.update(task) : this.create(task);
   }
 
-  public async loadPosts(churchId: string, personId: string) {
-    const sql = "select 'task' as postType, id as postId, createdById as posterId, createdByLabel as posterName, title as message, conversationId from tasks"
-      + " where churchId=? AND status='Open' and ("
-      + "	(associatedWithType='person' and associatedWithId=?)"
-      + "    OR"
-      + "    (createdByType='person' and createdById=?)"
-      + "    OR"
-      + "    (assignedToType='person' and assignedToId=?)"
+  public async loadTimeline(churchId: string, personId: string, taskIds: string[]) {
+    let sql = "select *, 'task' as postType, id as postId from tasks"
+      + " where churchId=? AND ("
+      + "   status='Open' and ("
+      + "	    (associatedWithType='person' and associatedWithId=?)"
+      + "        OR"
+      + "        (createdByType='person' and createdById=?)"
+      + "        OR"
+      + "        (assignedToType='person' and assignedToId=?)"
+      + "   )"
       + ")";
-    const params = [churchId, personId, personId, personId];
+    const params:any[] = [churchId, personId, personId, personId];
+    if (taskIds.length>0) {
+      sql += " OR id IN (?)";
+      params.push(taskIds);
+    }
     const result = await DB.query(sql, params);
     return result;
   }
