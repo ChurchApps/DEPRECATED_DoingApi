@@ -1,6 +1,6 @@
 import { PoolHelper } from "./PoolHelper";
 import { PoolConnection, MysqlError, queryCallback } from "mysql";
-import { LoggingHelper } from "../apiBase";
+import { LoggingHelper } from "@churchapps/apihelper";
 
 export class DBHelper {
 

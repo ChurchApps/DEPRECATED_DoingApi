@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import mysql from "mysql";
-import { ArrayHelper } from "../apiBase/helpers";
+import { ArrayHelper } from "@churchapps/apihelper";
 
 dotenv.config();
 

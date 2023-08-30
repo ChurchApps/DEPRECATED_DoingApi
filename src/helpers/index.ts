@@ -1,5 +1,4 @@
-export * from '../apiBase/helpers/AwsHelper';
-export * from '../apiBase/helpers/OmitEmpty';
+export { AwsHelper, OmitEmpty } from "@churchapps/apihelper";
 export { Environment } from "./Environment";
 export { AutomationHelper } from "./AutomationHelper";
 export { ConditionHelper } from "./ConditionHelper";
