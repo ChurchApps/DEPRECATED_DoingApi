@@ -1,6 +1,6 @@
 import { Repositories } from "../repositories";
 import { Automation, Condition, Conjunction } from "../models";
-import { ArrayHelper } from "../apiBase";
+import { ArrayHelper } from "@churchapps/apihelper";
 import { ConditionHelper } from "./ConditionHelper";
 
 
