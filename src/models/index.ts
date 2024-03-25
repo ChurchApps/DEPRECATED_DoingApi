@@ -1,5 +1,9 @@
 export { Action } from "./Action";
+export { Assignment } from "./Assignment";
 export { Automation } from "./Automation";
 export { Condition } from "./Condition";
 export { Conjunction } from "./Conjunction";
+export { Plan } from "./Plan";
+export { Position } from "./Position";
 export { Task } from "./Task";
+export { Time } from "./Time";

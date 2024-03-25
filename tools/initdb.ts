@@ -16,7 +16,15 @@ const init = async () => {
     { title: "Conditions", file: "conditions.mysql" }
   ]
 
+  const schedulingTables: { title: string, file: string }[] = [
+    { title: "Assignments", file: "assignments.mysql" },
+    { title: "Plans", file: "plans.mysql" },
+    { title: "Positions", file: "positions.mysql" },
+    { title: "Times", file: "times.mysql" }
+  ]
+
   await initTables("Tasks", taskTables);
+  await initTables("Scheduling", schedulingTables);
 };
 
 

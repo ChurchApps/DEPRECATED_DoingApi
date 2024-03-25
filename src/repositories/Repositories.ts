@@ -4,15 +4,23 @@ import {
   ConditionRepository,
   ConjunctionRepository,
   TaskRepository,
-  MembershipRepository
+  MembershipRepository,
+  AssignmentRepository,
+  PlanRepository,
+  PositionRepository,
+  TimeRepository
 } from ".";
 
 export class Repositories {
   public action: ActionRepository;
+  public assignment: AssignmentRepository;
   public automation: AutomationRepository;
   public condition: ConditionRepository;
   public conjunction: ConjunctionRepository;
+  public plan: PlanRepository;
+  public position: PositionRepository;
   public task: TaskRepository;
+  public time: TimeRepository;
 
   public membership: MembershipRepository;
 
@@ -24,10 +32,14 @@ export class Repositories {
 
   constructor() {
     this.action = new ActionRepository();
+    this.assignment = new AssignmentRepository();
     this.automation = new AutomationRepository();
     this.condition = new ConditionRepository();
     this.conjunction = new ConjunctionRepository();
+    this.plan = new PlanRepository();
+    this.position = new PositionRepository();
     this.task = new TaskRepository();
+    this.time = new TimeRepository();
 
     this.membership = new MembershipRepository();
   }

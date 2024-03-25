@@ -1,0 +1,8 @@
+CREATE TABLE `positions` (
+  `id` char(11) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `churchId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `planId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `categoryName` varchar(45) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `name` varchar(45) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);

@@ -1,0 +1,8 @@
+CREATE TABLE `times` (
+  `id` char(11) COLLATE utf8mb4_unicode_520_ci NOT NULL,
+  `churchId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `planId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `startTime` datetime DEFAULT NULL,
+  `endTime` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
