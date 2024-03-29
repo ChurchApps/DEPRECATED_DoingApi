@@ -4,4 +4,5 @@ export class Position {
   public planId?: string;
   public categoryName?: string;
   public name?: string;
+  public count?: number;
 }

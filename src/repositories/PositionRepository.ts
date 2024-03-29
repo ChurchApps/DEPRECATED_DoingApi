@@ -12,15 +12,15 @@ export class PositionRepository {
 
   private async create(position: Position) {
     position.id = UniqueIdHelper.shortId();
-    const sql = "INSERT INTO positions (id, churchId, planId, categoryName, name) VALUES (?, ?, ?, ?, ?);";
-    const params = [position.id, position.churchId, position.planId, position.categoryName, position.name];
+    const sql = "INSERT INTO positions (id, churchId, planId, categoryName, name, count) VALUES (?, ?, ?, ?, ?, ?);";
+    const params = [position.id, position.churchId, position.planId, position.categoryName, position.name, position.count];
     await DB.query(sql, params);
     return position;
   }
 
   private async update(position: Position) {
-    const sql = "UPDATE positions SET planId=?, categoryName=?, name=? WHERE id=? and churchId=?";
-    const params = [position.planId, position.categoryName, position.name, position.id, position.churchId];
+    const sql = "UPDATE positions SET planId=?, categoryName=?, name=?, count=? WHERE id=? and churchId=?";
+    const params = [position.planId, position.categoryName, position.name, position.count, position.id, position.churchId];
     await DB.query(sql, params);
     return position;
   }
