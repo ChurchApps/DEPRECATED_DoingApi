@@ -5,4 +5,5 @@ export class Position {
   public categoryName?: string;
   public name?: string;
   public count?: number;
+  public groupId?: string;
 }

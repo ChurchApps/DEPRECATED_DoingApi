@@ -34,4 +34,8 @@ export class AssignmentRepository {
     return DB.queryOne("SELECT * FROM assignments WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
+  public loadByPlanId(churchId: string, planId: string) {
+    return DB.query("SELECT a.* FROM assignments a INNER JOIN positions p on p.id=a.positionId WHERE a.churchId=? AND p.planId=?;", [churchId, planId]);
+  }
+
 }

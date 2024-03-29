@@ -13,6 +13,13 @@ export class AssignmentController extends DoingBaseController {
     });
   }
 
+  @httpGet("/plan/:planId")
+  public async getForPlan(@requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.assignment.loadByPlanId(au.churchId, planId);
+    });
+  }
+
   @httpPost("/")
   public async save(req: express.Request<{}, {}, Assignment[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
