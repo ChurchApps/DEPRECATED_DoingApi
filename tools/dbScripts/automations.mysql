@@ -7,4 +7,4 @@ CREATE TABLE `automations` (
   `recurs` varchar(45) DEFAULT NULL,
   `active` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+);

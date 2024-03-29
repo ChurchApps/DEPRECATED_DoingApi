@@ -12,15 +12,15 @@ export class TimeRepository {
 
   private async create(time: Time) {
     time.id = UniqueIdHelper.shortId();
-    const sql = "INSERT INTO times (id, churchId, planId, startTime, endTime) VALUES (?, ?, ?, ?, ?);";
-    const params = [time.id, time.churchId, time.planId, time.startTime, time.endTime];
+    const sql = "INSERT INTO times (id, churchId, planId, displayName, startTime, endTime, teams) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const params = [time.id, time.churchId, time.planId, time.displayName, time.startTime, time.endTime, time.teams];
     await DB.query(sql, params);
     return time;
   }
 
   private async update(time: Time) {
-    const sql = "UPDATE times SET planId=?, startTime=?, endTime=? WHERE id=? and churchId=?";
-    const params = [time.planId, time.startTime, time.endTime, time.id, time.churchId];
+    const sql = "UPDATE times SET planId=?, displayName=?, startTime=?, endTime=?, teams=? WHERE id=? and churchId=?";
+    const params = [time.planId, time.displayName, time.startTime, time.endTime, time.teams, time.id, time.churchId];
     await DB.query(sql, params);
     return time;
   }

@@ -10,6 +10,6 @@ CREATE TABLE `conditions` (
   `value` varchar(45) DEFAULT NULL,
   `label` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+);
 
 
