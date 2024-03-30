@@ -29,6 +29,10 @@ export class PositionRepository {
     return DB.query("DELETE FROM positions WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
+  public deleteByPlanId(churchId: string, planId: string) {
+    return DB.query("DELETE FROM positions WHERE churchId=? and planId=?;", [churchId, planId]);
+  }
+
   public load(churchId: string, id: string) {
     return DB.queryOne("SELECT * FROM positions WHERE id=? AND churchId=?;", [id, churchId]);
   }

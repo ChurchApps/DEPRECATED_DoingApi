@@ -35,7 +35,7 @@ export class PlanRepository {
   }
 
   public loadAll(churchId: string) {
-    return DB.query("SELECT * FROM plans WHERE churchId=?;", [churchId]);
+    return DB.query("SELECT * FROM plans WHERE churchId=? order by serviceDate desc;", [churchId]);
   }
 
 }

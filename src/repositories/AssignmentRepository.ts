@@ -30,6 +30,10 @@ export class AssignmentRepository {
     return DB.query("DELETE FROM assignments WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
+  public deleteByPlanId(churchId: string, planId: string) {
+    return DB.query("DELETE FROM assignments WHERE churchId=? and positionId IN (SELECT id from positions WHERE planId=?);", [churchId, planId]);
+  }
+
   public load(churchId: string, id: string) {
     return DB.queryOne("SELECT * FROM assignments WHERE id=? AND churchId=?;", [id, churchId]);
   }

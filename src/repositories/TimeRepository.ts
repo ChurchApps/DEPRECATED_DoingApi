@@ -29,6 +29,10 @@ export class TimeRepository {
     return DB.query("DELETE FROM times WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
+  public deleteByPlanId(churchId: string, planId: string) {
+    return DB.query("DELETE FROM times WHERE churchId=? and planId=?;", [churchId, planId]);
+  }
+
   public load(churchId: string, id: string) {
     return DB.queryOne("SELECT * FROM times WHERE id=? AND churchId=?;", [id, churchId]);
   }
