@@ -13,15 +13,15 @@ export class AssignmentRepository {
   private async create(assignment: Assignment) {
     assignment.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO assignments (id, churchId, positionId, personId) VALUES (?, ?, ?, ?);";
-    const params = [assignment.id, assignment.churchId, assignment.positionId, assignment.personId];
+    const sql = "INSERT INTO assignments (id, churchId, positionId, personId, status) VALUES (?, ?, ?, ?, ?);";
+    const params = [assignment.id, assignment.churchId, assignment.positionId, assignment.personId, assignment.status];
     await DB.query(sql, params);
     return assignment;
   }
 
   private async update(assignment: Assignment) {
-    const sql = "UPDATE assignments SET positionId=?, personId=? WHERE id=? and churchId=?";
-    const params = [assignment.positionId, assignment.personId, assignment.id, assignment.churchId];
+    const sql = "UPDATE assignments SET positionId=?, personId=?, status=? WHERE id=? and churchId=?";
+    const params = [assignment.positionId, assignment.personId, assignment.status, assignment.id, assignment.churchId];
     await DB.query(sql, params);
     return assignment;
   }
@@ -40,6 +40,11 @@ export class AssignmentRepository {
 
   public loadByPlanId(churchId: string, planId: string) {
     return DB.query("SELECT a.* FROM assignments a INNER JOIN positions p on p.id=a.positionId WHERE a.churchId=? AND p.planId=?;", [churchId, planId]);
+  }
+
+  public loadByByPersonId(churchId: string, personId: string) {
+    console.log("SELECT * FROM assignments WHERE churchId=? AND personId=?;", [churchId, personId]);
+    return DB.query("SELECT * FROM assignments WHERE churchId=? AND personId=?;", [churchId, personId]);
   }
 
 }

@@ -34,6 +34,10 @@ export class PlanRepository {
     return DB.queryOne("SELECT * FROM plans WHERE id=? AND churchId=?;", [id, churchId]);
   }
 
+  public loadByIds(churchId: string, ids: string[]) {
+    return DB.query("SELECT * FROM plans WHERE churchId=? and id in (?);", [churchId, ids]);
+  }
+
   public loadAll(churchId: string) {
     return DB.query("SELECT * FROM plans WHERE churchId=? order by serviceDate desc;", [churchId]);
   }

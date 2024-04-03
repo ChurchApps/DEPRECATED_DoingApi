@@ -1,7 +1,8 @@
 CREATE TABLE `assignments` (
-  `id` char(11) COLLATE utf8mb4_unicode_520_ci NOT NULL,
-  `churchId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `positionId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
-  `personId` char(11) COLLATE utf8mb4_unicode_520_ci DEFAULT NULL,
+  `id` char(11) NOT NULL,
+  `churchId` char(11) DEFAULT NULL,
+  `positionId` char(11) DEFAULT NULL,
+  `personId` char(11) DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );

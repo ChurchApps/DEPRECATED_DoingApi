@@ -6,6 +6,15 @@ import { Plan, Position, Time } from "../models"
 @controller("/plans")
 export class PlanController extends DoingBaseController {
 
+  @httpGet("/ids")
+  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      const idsString = req.query.ids as string;
+      const ids = idsString.split(",");
+      return await this.repositories.plan.loadByIds(au.churchId, ids);
+    });
+  }
+
   @httpGet("/:id")
   public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {

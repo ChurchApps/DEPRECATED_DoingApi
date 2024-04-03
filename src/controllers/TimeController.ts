@@ -6,6 +6,15 @@ import { Time } from "../models"
 @controller("/times")
 export class TimeController extends DoingBaseController {
 
+  @httpGet("/plans")
+  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      const idsString = req.query.planIds as string;
+      const planIds = idsString.split(",");
+      return await this.repositories.time.loadByPlanIds(au.churchId, planIds);
+    });
+  }
+
   @httpGet("/:id")
   public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {

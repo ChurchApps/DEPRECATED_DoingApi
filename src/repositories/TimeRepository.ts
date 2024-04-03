@@ -41,4 +41,8 @@ export class TimeRepository {
     return DB.query("SELECT * FROM times WHERE churchId=? AND planId=?;", [churchId, planId]);
   }
 
+    public loadByPlanIds(churchId: string, planIds: string[]) {
+    return DB.query("SELECT * FROM times WHERE churchId=? and planId in (?);", [churchId, planIds]);
+  }
+
 }

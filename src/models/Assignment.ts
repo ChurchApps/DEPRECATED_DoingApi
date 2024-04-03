@@ -3,5 +3,5 @@ export class Assignment {
   public churchId?: string;
   public positionId?: string;
   public personId?: string;
-  public response?: string;
+  public status?: string;
 }
