@@ -1,6 +1,7 @@
 import {
   ActionRepository,
   AutomationRepository,
+  BlockoutDateRepository,
   ConditionRepository,
   ConjunctionRepository,
   TaskRepository,
@@ -15,6 +16,7 @@ export class Repositories {
   public action: ActionRepository;
   public assignment: AssignmentRepository;
   public automation: AutomationRepository;
+  public blockoutDate: BlockoutDateRepository;
   public condition: ConditionRepository;
   public conjunction: ConjunctionRepository;
   public plan: PlanRepository;
@@ -34,6 +36,7 @@ export class Repositories {
     this.action = new ActionRepository();
     this.assignment = new AssignmentRepository();
     this.automation = new AutomationRepository();
+    this.blockoutDate = new BlockoutDateRepository();
     this.condition = new ConditionRepository();
     this.conjunction = new ConjunctionRepository();
     this.plan = new PlanRepository();
