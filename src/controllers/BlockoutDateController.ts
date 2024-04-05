@@ -22,7 +22,7 @@ export class BlockoutDateController extends DoingBaseController {
     });
   }
 
-  @httpGet("/upcomming")
+  @httpGet("/upcoming")
   public async getAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.blockoutDate.loadUpcoming(au.churchId);
