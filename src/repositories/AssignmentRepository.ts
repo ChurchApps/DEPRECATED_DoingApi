@@ -13,15 +13,15 @@ export class AssignmentRepository {
   private async create(assignment: Assignment) {
     assignment.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO assignments (id, churchId, positionId, personId, status) VALUES (?, ?, ?, ?, ?);";
-    const params = [assignment.id, assignment.churchId, assignment.positionId, assignment.personId, assignment.status];
+    const sql = "INSERT INTO assignments (id, churchId, positionId, personId, status, notified) VALUES (?, ?, ?, ?, ?, ?);";
+    const params = [assignment.id, assignment.churchId, assignment.positionId, assignment.personId, assignment.status, assignment.notified];
     await DB.query(sql, params);
     return assignment;
   }
 
   private async update(assignment: Assignment) {
-    const sql = "UPDATE assignments SET positionId=?, personId=?, status=? WHERE id=? and churchId=?";
-    const params = [assignment.positionId, assignment.personId, assignment.status, assignment.id, assignment.churchId];
+    const sql = "UPDATE assignments SET positionId=?, personId=?, status=?, notified=? WHERE id=? and churchId=?";
+    const params = [assignment.positionId, assignment.personId, assignment.status, assignment.notified, assignment.id, assignment.churchId];
     await DB.query(sql, params);
     return assignment;
   }

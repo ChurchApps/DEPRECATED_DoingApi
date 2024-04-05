@@ -57,6 +57,7 @@ export class AssignmentController extends DoingBaseController {
       const promises: Promise<Assignment>[] = [];
       req.body.forEach(assignment => {
         assignment.churchId = au.churchId;
+        if (!assignment.status) assignment.status = "Unconfirmed";
         promises.push(this.repositories.assignment.save(assignment));
       });
       const result = await Promise.all(promises);

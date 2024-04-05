@@ -4,4 +4,5 @@ export class Assignment {
   public positionId?: string;
   public personId?: string;
   public status?: string;
+  public notified?: Date;
 }

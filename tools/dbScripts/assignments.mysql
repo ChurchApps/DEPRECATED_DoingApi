@@ -4,5 +4,6 @@ CREATE TABLE `assignments` (
   `positionId` char(11) DEFAULT NULL,
   `personId` char(11) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
+  `notified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
