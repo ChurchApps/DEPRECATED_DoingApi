@@ -2,6 +2,7 @@ import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } f
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController"
 import { Plan, Position, Time } from "../models"
+import { PlanHelper } from "../helpers/PlanHelper";
 
 @controller("/plans")
 export class PlanController extends DoingBaseController {
@@ -34,6 +35,23 @@ export class PlanController extends DoingBaseController {
     const result = new Date(time);
     result.setDate(result.getDate() + dayDiff);
     return result;
+  }
+
+  @httpPost("/autofill/:id")
+  public async autofill(@requestParam("id") id: string, req: express.Request<{}, {}, {teams:{positionId:string, personIds:string[]}[]}>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+
+      const plan = await this.repositories.plan.load(au.churchId, id);
+      const positions:Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
+      const assignments = await this.repositories.assignment.loadByPlanId(au.churchId, id);
+      const blockoutDates = await this.repositories.blockoutDate.loadUpcoming(au.churchId);
+      const lastServed = await this.repositories.assignment.loadLastServed(au.churchId);
+
+      PlanHelper.autofill(positions, assignments, blockoutDates, req.body.teams, lastServed);
+
+
+      return plan;
+    });
   }
 
   @httpPost("/copy/:id")
