@@ -42,6 +42,10 @@ export class AssignmentRepository {
     return DB.query("SELECT a.* FROM assignments a INNER JOIN positions p on p.id=a.positionId WHERE a.churchId=? AND p.planId=?;", [churchId, planId]);
   }
 
+  public loadByPlanIds(churchId: string, planIds: string[]) {
+    return DB.query("SELECT a.* FROM assignments a INNER JOIN positions p on p.id=a.positionId WHERE a.churchId=? AND p.planId IN (?);", [churchId, planIds]);
+  }
+
   public loadLastServed(churchId: string) {
     const sql = "select a.personId, max(pl.serviceDate) as serviceDate"
     + " from assignments a"
