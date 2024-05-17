@@ -20,6 +20,15 @@ export class AssignmentController extends DoingBaseController {
     });
   }
 
+  @httpGet("/plan/ids")
+  public async getByPlanIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      const planIdsString = req.query.planIds as string;
+      const planIds = planIdsString.split(",");
+      return await this.repositories.assignment.loadByPlanIds(au.churchId, planIds);
+    });
+  }
+
   @httpGet("/plan/:planId")
   public async getForPlan(@requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {

@@ -45,4 +45,8 @@ export class PositionRepository {
     return DB.query("SELECT * FROM positions WHERE churchId=? AND planId=? ORDER BY categoryName, name;", [churchId, planId]);
   }
 
+  public loadByPlanIds(churchId: string, planIds: string[]) {
+    return DB.query("SELECT * FROM positions WHERE churchId=? AND planId in (?);", [churchId, planIds]);
+  }
+
 }
