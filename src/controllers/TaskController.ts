@@ -1,7 +1,9 @@
 import { controller, httpPost, httpGet, interfaces, requestParam } from "inversify-express-utils";
 import express from "express";
+import { FileStorageHelper } from "@churchapps/apihelper";
 import { DoingBaseController } from "./DoingBaseController"
 import { Task } from "../models"
+import { Environment } from "../helpers";
 
 @controller("/tasks")
 export class TaskController extends DoingBaseController {
@@ -48,6 +50,15 @@ export class TaskController extends DoingBaseController {
       const result: Task[] = []
       for (const task of req.body) {
         task.churchId = au.churchId;
+        if (task.taskType === "directoryUpdate" && task.status === "Open") {
+          const data = JSON.parse(task.data);
+          for (const d of data) {
+            if (d.field === "photo" && d.value !== undefined) {
+              d.value = await this.savePhoto(au.churchId, d.value, task);
+            }
+          }
+          task.data = JSON.stringify(data);
+        }
         result.push(await this.repositories.task.save(task));
       }
       return result;
@@ -62,5 +73,14 @@ export class TaskController extends DoingBaseController {
     });
   }
   */
+
+  private async savePhoto(churchId: string, base64Str: string, task: Task) {
+    const base64 = base64Str.split(",")[1];
+    const key = "/" + churchId + "/membership/people/" + task.associatedWithId + ".png";
+    await FileStorageHelper.store(key, "image/png", Buffer.from(base64, "base64"));
+    const photoUpdated = new Date();
+    const photo: string = Environment.contentRoot + key + "?dt=" + photoUpdated.getTime().toString();
+    return photo;
+  }
 
 }
