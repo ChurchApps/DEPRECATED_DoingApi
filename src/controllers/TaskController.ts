@@ -50,15 +50,7 @@ export class TaskController extends DoingBaseController {
       const result: Task[] = []
       for (const task of req.body) {
         task.churchId = au.churchId;
-        if (task.taskType === "directoryUpdate" && task.status === "Open") {
-          const data = JSON.parse(task.data);
-          for (const d of data) {
-            if (d.field === "photo" && d.value !== undefined) {
-              d.value = await this.savePhoto(au.churchId, d.value, task);
-            }
-          }
-          task.data = JSON.stringify(data);
-        }
+        if (req.query?.type === "directoryUpdate") await this.handleDirectoryUpdate(au.churchId, task);
         result.push(await this.repositories.task.save(task));
       }
       return result;
@@ -81,6 +73,19 @@ export class TaskController extends DoingBaseController {
     const photoUpdated = new Date();
     const photo: string = Environment.contentRoot + key + "?dt=" + photoUpdated.getTime().toString();
     return photo;
+  }
+
+  private async handleDirectoryUpdate (churchId: string, task: Task) {
+    if (task.status === "Open") {
+      const data = JSON.parse(task.data);
+      for (const d of data) {
+        if (d.field === "photo" && d.value !== undefined) {
+          d.value = await this.savePhoto(churchId, d.value, task);
+        }
+      }
+      task.data = JSON.stringify(data);
+      task.taskType = "directoryUpdate";
+    }
   }
 
 }
