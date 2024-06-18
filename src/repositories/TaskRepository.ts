@@ -104,6 +104,10 @@ export class TaskRepository {
     else return DB.query("SELECT * FROM tasks WHERE churchId=? AND ((assignedToType='group' AND assignedToId IN (?)) OR (createdByType='group' AND createdById IN (?))) AND status=? order by taskNumber;", [churchId, groupIds, groupIds, status]);
   }
 
+  public async loadForDirectoryUpdate(churchId: string, personId: string) {
+    return DB.query("SELECT * FROM tasks WHERE taskType='directoryUpdate' AND status='Open' AND churchId=? AND associatedWithId=?;", [churchId, personId]);
+  }
+
   public loadAll(churchId: string) {
     return DB.query("SELECT * FROM tasks WHERE churchId=?;", [churchId]);
   }
