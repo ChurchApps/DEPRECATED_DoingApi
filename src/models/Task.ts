@@ -18,4 +18,5 @@ export class Task {
   public status?: string;
   public automationId?: string;
   public conversationId?: string;
+  public data?: string;
 }
