@@ -1,16 +1,15 @@
 service: doing-api
+variablesResolutionMode: 20210326
 
 custom:
   serverless-layers:
     dependenciesPath: ./package.json
-    layersDeploymentBucket: "lcs-layers"
+    layersDeploymentBucket: ${env:SERVERLESS_LAYERS_BUCKET, 'lcs-layers'}
   env: ${lower(${opt:stage, self:provider.stage})}
   vpcSettings:
     prod:
-      securityGroupIds:
-        - sg-052314a1eec2f2567
-      subnetIds:
-        - subnet-01a6b61d749d10c46
+      securityGroupIds: ${split(${env:SECURITY_GROUP_IDS, 'sg-052314a1eec2f2567'}, ',')}
+      subnetIds: ${split(${env:SUBNET_IDS, 'subnet-01a6b61d749d10c46'}, ',')}
     current: ${ternary( ${self:custom.env}, prod, ${self:custom.vpcSettings.prod}, ~ )}
 
 provider:
@@ -18,9 +17,9 @@ provider:
   runtime: nodejs18.x
   memorySize: 1024
   timeout: 10
-  region: us-east-2
+  region: ${env:AWS_REGION, 'us-east-2'}
   iam:
-    role: arn:aws:iam::428019619026:role/ChurchAppsRole
+    role: arn:aws:iam::${aws:accountId}:role/ChurchAppsRole
   environment:
     APP_ENV: ${self:custom.env}
 
