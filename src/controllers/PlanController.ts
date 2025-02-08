@@ -30,7 +30,7 @@ export class PlanController extends DoingBaseController {
     });
   }
 
-  private adjustTime(time:Date, serviceDate:Date, oldServiceDate:Date) {
+  private adjustTime(time: Date, serviceDate: Date, oldServiceDate: Date) {
     const dayDiff = serviceDate.getDate() - oldServiceDate.getDate();
     const result = new Date(time);
     result.setDate(result.getDate() + dayDiff);
@@ -38,11 +38,11 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpPost("/autofill/:id")
-  public async autofill(@requestParam("id") id: string, req: express.Request<{}, {}, {teams:{positionId:string, personIds:string[]}[]}>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+  public async autofill(@requestParam("id") id: string, req: express.Request<{}, {}, { teams: { positionId: string, personIds: string[] }[] }>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
 
       const plan = await this.repositories.plan.load(au.churchId, id);
-      const positions:Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
+      const positions: Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
       const assignments = await this.repositories.assignment.loadByPlanId(au.churchId, id);
       const blockoutDates = await this.repositories.blockoutDate.loadUpcoming(au.churchId);
       const lastServed = await this.repositories.assignment.loadLastServed(au.churchId);
@@ -59,8 +59,8 @@ export class PlanController extends DoingBaseController {
     return this.actionWrapper(req, res, async (au) => {
 
       const oldPlan = await this.repositories.plan.load(au.churchId, id);
-      const times:Time[] = await this.repositories.time.loadByPlanId(au.churchId, id);
-      const positions:Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
+      const times: Time[] = await this.repositories.time.loadByPlanId(au.churchId, id);
+      const positions: Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
 
       const p = { ...req.body } as Plan;
       p.churchId = au.churchId;
@@ -105,6 +105,7 @@ export class PlanController extends DoingBaseController {
       await this.repositories.time.deleteByPlanId(au.churchId, id);
       await this.repositories.assignment.deleteByPlanId(au.churchId, id);
       await this.repositories.position.deleteByPlanId(au.churchId, id);
+      await this.repositories.planItem.deleteByPlanId(au.churchId, id);
       await this.repositories.plan.delete(au.churchId, id);
       return this.json({});
     });

@@ -9,7 +9,8 @@ import {
   AssignmentRepository,
   PlanRepository,
   PositionRepository,
-  TimeRepository
+  TimeRepository,
+  PlanItemRepository
 } from ".";
 
 export class Repositories {
@@ -20,6 +21,7 @@ export class Repositories {
   public condition: ConditionRepository;
   public conjunction: ConjunctionRepository;
   public plan: PlanRepository;
+  public planItem: PlanItemRepository;
   public position: PositionRepository;
   public task: TaskRepository;
   public time: TimeRepository;
@@ -40,6 +42,7 @@ export class Repositories {
     this.condition = new ConditionRepository();
     this.conjunction = new ConjunctionRepository();
     this.plan = new PlanRepository();
+    this.planItem = new PlanItemRepository();
     this.position = new PositionRepository();
     this.task = new TaskRepository();
     this.time = new TimeRepository();
