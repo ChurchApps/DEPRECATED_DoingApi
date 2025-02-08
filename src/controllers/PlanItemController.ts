@@ -30,6 +30,22 @@ export class PlanItemController extends DoingBaseController {
     });
   }
 
+  @httpPost("/sort")
+  public async sort(req: express.Request<{}, {}, PlanItem>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      await this.repositories.planItem.save(req.body);
+
+      const items = await this.repositories.planItem.loadForPlan(au.churchId, req.body.planId);
+      const filtered = items.filter((i: PlanItem) => i.parentId === req.body.parentId);
+      filtered.sort((a: PlanItem, b: PlanItem) => a.sort - b.sort);
+      for (let i = 0; i < filtered.length; i++) {
+        filtered[i].sort = i + 1;
+        await this.repositories.planItem.save(filtered[i]);
+      }
+      return [];
+    });
+  }
+
   @httpPost("/")
   public async save(req: express.Request<{}, {}, PlanItem[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
