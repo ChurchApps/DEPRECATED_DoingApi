@@ -8,5 +8,7 @@ export class PlanItem {
   public relatedId?: string;
   public label?: string;
   public description?: string;
-  public seconds?: string;
+  public seconds?: number;
+
+  public children?: PlanItem[];
 }

@@ -1,8 +1,7 @@
 import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController"
-import { PlanItem, Position, Time } from "../models"
-
+import { PlanItem } from "../models"
 
 @controller("/planItems")
 export class PlanItemController extends DoingBaseController {
@@ -26,7 +25,8 @@ export class PlanItemController extends DoingBaseController {
   @httpGet("/plan/:planId")
   public async getByPlan(@requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
-      return await this.repositories.planItem.loadForPlan(au.churchId, planId);
+      const result = await this.repositories.planItem.loadForPlan(au.churchId, planId);
+      return this.buildTree(result, null);
     });
   }
 
@@ -50,5 +50,17 @@ export class PlanItemController extends DoingBaseController {
       return this.json({});
     });
   }
+
+  private buildTree(planItems: PlanItem[], parentId: string): PlanItem[] {
+    const result: PlanItem[] = [];
+    planItems.forEach(pi => {
+      if (pi.parentId === parentId) {
+        pi.children = this.buildTree(planItems, pi.id);
+        result.push(pi);
+      }
+    });
+    return result;
+  }
+
 
 }
