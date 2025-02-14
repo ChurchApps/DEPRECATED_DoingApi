@@ -13,15 +13,16 @@ export class PlanRepository {
   private async create(plan: Plan) {
     plan.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes) VALUES (?, ?, ?, ?, ?, ?);";
-    const params = [plan.id, plan.churchId, plan.ministryId, plan.name, plan.serviceDate, plan.notes];
+    const sql = "INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes, serviceOrder) VALUES (?, ?, ?, ?, ?, ?, ?);";
+    const params = [plan.id, plan.churchId, plan.ministryId, plan.name, plan.serviceDate.toISOString().split("T")[0], plan.notes, plan.serviceOrder];
+    console.log("sql:", sql, "Params:", params)
     await DB.query(sql, params);
     return plan;
   }
 
   private async update(plan: Plan) {
-    const sql = "UPDATE plans SET ministryId=?, name=?, serviceDate=?, notes=? WHERE id=? and churchId=?";
-    const params = [plan.ministryId, plan.name, plan.serviceDate, plan.notes, plan.id, plan.churchId];
+    const sql = "UPDATE plans SET ministryId=?, name=?, serviceDate=?, notes=?, serviceOrder=? WHERE id=? and churchId=?";
+    const params = [plan.ministryId, plan.name, plan.serviceDate.toISOString().split("T")[0], plan.notes, plan.serviceOrder, plan.id, plan.churchId];
     await DB.query(sql, params);
     return plan;
   }
