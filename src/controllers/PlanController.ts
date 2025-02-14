@@ -19,7 +19,9 @@ export class PlanController extends DoingBaseController {
   @httpGet("/:id")
   public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
-      return await this.repositories.plan.load(au.churchId, id);
+      const result = await this.repositories.plan.load(au.churchId, id);
+      console.log(result);
+      return result;
     });
   }
 
@@ -92,6 +94,9 @@ export class PlanController extends DoingBaseController {
       const promises: Promise<Plan>[] = [];
       req.body.forEach(plan => {
         plan.churchId = au.churchId;
+        if (plan.serviceDate) {
+          plan.serviceDate = new Date(plan.serviceDate);
+        }
         promises.push(this.repositories.plan.save(plan));
       });
       const result = await Promise.all(promises);

@@ -5,4 +5,5 @@ export class Plan {
   public name?: string;
   public serviceDate?: Date;
   public notes?: string;
+  public serviceOrder?: boolean;
 }
