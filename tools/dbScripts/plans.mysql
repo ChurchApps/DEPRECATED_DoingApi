@@ -7,5 +7,6 @@ CREATE TABLE `plans` (
   `name` varchar(45) DEFAULT NULL,
   `serviceDate` date DEFAULT NULL,
   `notes` text,
+  `serviceOrder` BIT NULL,
   PRIMARY KEY (`id`)
 );
