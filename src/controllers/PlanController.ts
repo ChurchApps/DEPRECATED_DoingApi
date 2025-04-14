@@ -1,7 +1,7 @@
 import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController"
-import { Plan, Position, Time } from "../models"
+import { Plan, PlanItem, Position, Time } from "../models"
 import { PlanHelper } from "../helpers/PlanHelper";
 
 @controller("/plans")
@@ -63,6 +63,7 @@ export class PlanController extends DoingBaseController {
       const oldPlan = await this.repositories.plan.load(au.churchId, id);
       const times: Time[] = await this.repositories.time.loadByPlanId(au.churchId, id);
       const positions: Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
+      const planItems: PlanItem[] = await this.repositories.planItem.loadForPlan(au.churchId, id);
 
       const p = { ...req.body } as Plan;
       p.churchId = au.churchId;
@@ -82,6 +83,28 @@ export class PlanController extends DoingBaseController {
         position.planId = plan.id;
         promises.push(this.repositories.position.save(position));
       });
+
+      const piPromises: Promise<any>[] = [];
+      planItems.forEach(planItem => {
+        planItem.id = null;
+        planItem.planId = plan.id;
+        piPromises.push(this.repositories.planItem.save(planItem));
+      });
+      const newPlanItems = await Promise.all(piPromises);
+      for (let i = 0; i < newPlanItems.length; i++) {
+        if (newPlanItems[i].parentId) {
+          let oldIndex = -1;
+          for (let j = 0; j < planItems.length; j++) {
+            if (planItems[j].id === newPlanItems[i].parentId) {
+              oldIndex = j;
+              break;
+            }
+          }
+          if (oldIndex > -1) newPlanItems[i].parentId = newPlanItems[oldIndex].id;
+          else newPlanItems[i].parentId = null;
+          promises.push(this.repositories.planItem.save(newPlanItems[i]));
+        }
+      }
 
       await Promise.all(promises);
       return plan;
