@@ -84,27 +84,31 @@ export class PlanController extends DoingBaseController {
         promises.push(this.repositories.position.save(position));
       });
 
+      const idMap = new Map<string, string>(); // oldId -> newId
       const piPromises: Promise<any>[] = [];
-      planItems.forEach(planItem => {
-        planItem.id = null;
-        planItem.planId = plan.id;
-        piPromises.push(this.repositories.planItem.save(planItem));
-      });
+
+      for (const pi of planItems) {
+        const oldId = pi.id;
+        pi.id = null;
+        pi.planId = plan.id;
+        piPromises.push(
+          this.repositories.planItem.save(pi).then(saved => {
+            if (oldId) idMap.set(oldId, saved.id);
+            return saved;
+          })
+        );
+      }
+
       const newPlanItems = await Promise.all(piPromises);
-      for (let i = 0; i < newPlanItems.length; i++) {
-        if (newPlanItems[i].parentId) {
-          let oldIndex = -1;
-          for (let j = 0; j < planItems.length; j++) {
-            if (planItems[j].id === newPlanItems[i].parentId) {
-              oldIndex = j;
-              break;
-            }
-          }
-          if (oldIndex > -1) newPlanItems[i].parentId = newPlanItems[oldIndex].id;
-          else newPlanItems[i].parentId = null;
-          promises.push(this.repositories.planItem.save(newPlanItems[i]));
+      const updatePromises: Promise<any>[] = [];
+      for (const pi of newPlanItems) {
+        if (pi.parentId && idMap.has(pi.parentId)) {
+          pi.parentId = idMap.get(pi.parentId);
+          updatePromises.push(this.repositories.planItem.save(pi));
         }
       }
+
+      await Promise.all(updatePromises);
 
       await Promise.all(promises);
       return plan;
