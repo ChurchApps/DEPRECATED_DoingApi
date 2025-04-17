@@ -7,6 +7,14 @@ import { PlanHelper } from "../helpers/PlanHelper";
 @controller("/plans")
 export class PlanController extends DoingBaseController {
 
+  @httpGet("/presenter")
+  public async getForPresenter(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.plan.load7Days(au.churchId);
+    });
+  }
+
+
   @httpGet("/ids")
   public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {

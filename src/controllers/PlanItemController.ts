@@ -22,6 +22,14 @@ export class PlanItemController extends DoingBaseController {
     });
   }
 
+  @httpGet("/presenter/:churchId/:planId")
+  public async getForPresenter(@requestParam("churchId") churchId: string, @requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapperAnon(req, res, async () => {
+      const result = await this.repositories.planItem.loadForPlan(churchId, planId);
+      return this.buildTree(result, null);
+    });
+  }
+
   @httpGet("/plan/:planId")
   public async getByPlan(@requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {

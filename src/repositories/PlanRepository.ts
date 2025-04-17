@@ -43,4 +43,8 @@ export class PlanRepository {
     return DB.query("SELECT * FROM plans WHERE churchId=? order by serviceDate desc;", [churchId]);
   }
 
+  public load7Days(churchId: string) {
+    return DB.query("SELECT * FROM plans WHERE churchId=? AND serviceDate BETWEEN CURDATE() AND (CURDATE() + INTERVAL 7 DAY) order by serviceDate desc;", [churchId]);
+  }
+
 }
