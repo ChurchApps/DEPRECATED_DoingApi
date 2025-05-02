@@ -5,6 +5,6 @@ CREATE TABLE `actions` (
   `churchId` char(11) DEFAULT NULL,
   `automationId` char(11) DEFAULT NULL,
   `actionType` varchar(45) DEFAULT NULL,
-  `actionData` text,
+  `actionData` mediumtext,
   PRIMARY KEY (`id`)
 );

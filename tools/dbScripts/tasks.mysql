@@ -21,5 +21,9 @@ CREATE TABLE `tasks` (
   `automationId` char(11) DEFAULT NULL,
   `conversationId` char(11) DEFAULT NULL,
   `data` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_church_status` (`churchId`, `status`),
+  KEY `idx_automation` (`churchId`, `automationId`),
+  KEY `idx_assigned` (`churchId`, `assignedToType`, `assignedToId`),
+  KEY `idx_created` (`churchId`, `createdByType`, `createdById`)
 );

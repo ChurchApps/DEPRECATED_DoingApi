@@ -6,7 +6,7 @@ CREATE TABLE `plans` (
   `ministryId` char(11) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
   `serviceDate` date DEFAULT NULL,
-  `notes` text,
-  `serviceOrder` BIT NULL,
+  `notes` mediumtext,
+  `serviceOrder` bit(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );

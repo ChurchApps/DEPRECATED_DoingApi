@@ -19,7 +19,9 @@ const init = async () => {
   const schedulingTables: { title: string, file: string }[] = [
     { title: "Assignments", file: "assignments.mysql" },
     { title: "Blockout Dates", file: "blockoutDates.mysql" },
+    { title: "Notes", file: "notes.mysql" },
     { title: "Plans", file: "plans.mysql" },
+    { title: "PlanItems", file: "planItems.mysql" },
     { title: "Positions", file: "positions.mysql" },
     { title: "Times", file: "times.mysql" }
   ]
