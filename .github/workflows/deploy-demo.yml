@@ -28,12 +28,6 @@ jobs:
       - name: Setup Serverless
         run: export SERVERLESS_ACCESS_KEY="$SERVERLESS_ACCESS_KEY"
 
-      - name: Remove Previous Demo Stack
-        run:
-          |
-          npm install -g serverless
-          serverless remove --stage demo --verbose || echo "No existing stack to remove"
-
       - name: Reset and Initialize Database
         run:
           |

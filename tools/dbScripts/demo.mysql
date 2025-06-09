@@ -32,17 +32,17 @@ INSERT INTO actions (id, churchId, automationId, actionType, actionData) VALUES
 -- Create Worship Ministry Positions
 INSERT INTO positions (id, churchId, planId, categoryName, name, count, groupId) VALUES
 -- Sunday Morning Service Positions
-('POS00000001', 'CHU00000001', NULL, 'Worship', 'Worship Leader', 1, NULL),
-('POS00000002', 'CHU00000001', NULL, 'Worship', 'Acoustic Guitar', 1, NULL),
-('POS00000003', 'CHU00000001', NULL, 'Worship', 'Electric Guitar', 1, NULL),
-('POS00000004', 'CHU00000001', NULL, 'Worship', 'Bass Guitar', 1, NULL),
-('POS00000005', 'CHU00000001', NULL, 'Worship', 'Drums', 1, NULL),
-('POS00000006', 'CHU00000001', NULL, 'Worship', 'Keyboard', 1, NULL),
-('POS00000007', 'CHU00000001', NULL, 'Worship', 'Vocals', 1, NULL),
-('POS00000008', 'CHU00000001', NULL, 'Technical', 'Sound Tech', 1, NULL),
-('POS00000009', 'CHU00000001', NULL, 'Technical', 'Projection Tech', 1, NULL),
-('POS00000010', 'CHU00000001', NULL, 'Hospitality', 'Greeter', 1, NULL),
-('POS00000011', 'CHU00000001', NULL, 'Hospitality', 'Usher', 1, NULL);
+('POS00000001', 'CHU00000001', 'PLA00000001', 'Worship', 'Worship Leader', 1, 'GRP0000000b'),
+('POS00000002', 'CHU00000001', 'PLA00000001', 'Worship', 'Acoustic Guitar', 1, 'GRP0000000b'),
+('POS00000003', 'CHU00000001', 'PLA00000001', 'Worship', 'Electric Guitar', 1, 'GRP0000000b'),
+('POS00000004', 'CHU00000001', 'PLA00000001', 'Worship', 'Bass Guitar', 1, 'GRP0000000b'),
+('POS00000005', 'CHU00000001', 'PLA00000001', 'Worship', 'Drums', 1, 'GRP0000000b'),
+('POS00000006', 'CHU00000001', 'PLA00000001', 'Worship', 'Keyboard', 1, 'GRP0000000b'),
+('POS00000007', 'CHU00000001', 'PLA00000001', 'Worship', 'Vocals', 1, 'GRP0000000b'),
+('POS00000008', 'CHU00000001', 'PLA00000001', 'Technical', 'Sound Tech', 1, 'GRP0000000b'),
+('POS00000009', 'CHU00000001', 'PLA00000001', 'Technical', 'Projection Tech', 1, 'GRP0000000b'),
+('POS00000010', 'CHU00000001', 'PLA00000001', 'Hospitality', 'Greeter', 1, 'GRP0000000b'),
+('POS00000011', 'CHU00000001', 'PLA00000001', 'Hospitality', 'Usher', 1, 'GRP0000000b');
 
 -- Create Service Times
 INSERT INTO times (id, churchId, planId, displayName, startTime, endTime, teams) VALUES
@@ -51,115 +51,50 @@ INSERT INTO times (id, churchId, planId, displayName, startTime, endTime, teams)
 
 -- Create Worship Plans
 INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes, serviceOrder) VALUES
-('PLA00000001', 'CHU00000001', NULL, 'March Worship Schedule', '2024-03-03', 'March worship services including special Easter service', 1);
+('PLA00000001', 'CHU00000001', 'GRP0000000a', 'March Worship Schedule', '2024-03-03', 'March worship services including special Easter service', 1);
 
 -- Create Plan Items
 INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES
 -- Week 1 (March 3)
-('PLI00000001', 'CHU00000001', 'PLA00000001', NULL, 1, 'practice', 'TIM00000002', 'Thursday Practice - Feb 29', 'Practice for March 3 service', 7200),
-('PLI00000002', 'CHU00000001', 'PLA00000001', NULL, 2, 'service', 'TIM00000001', 'Sunday Service - March 3', 'Regular Sunday service', 5400),
+('PLI00000001', 'CHU00000001', 'PLA00000001', NULL, 1, 'header', NULL, 'Countdown Video', '', 0),
+('PLI00000002', 'CHU00000001', 'PLA00000001', 'PLI00000001', 1, 'item', NULL, 'Countdown Video', '', 600),
+('PLI00000003', 'CHU00000001', 'PLA00000001', 'PLI00000001', 2, 'item', NULL, 'Welcome and Opening Prayer', 'John leads', 120),
 
--- Week 2 (March 10)
-('PLI00000003', 'CHU00000001', 'PLA00000001', NULL, 3, 'practice', 'TIM00000002', 'Thursday Practice - March 7', 'Practice for March 10 service', 7200),
-('PLI00000004', 'CHU00000001', 'PLA00000001', NULL, 4, 'service', 'TIM00000001', 'Sunday Service - March 10', 'Regular Sunday service', 5400),
+-- Worship Section
+('PLI00000004', 'CHU00000001', 'PLA00000001', NULL, 2, 'header', NULL, 'Worship', '', 0),
+('PLI00000005', 'CHU00000001', 'PLA00000001', 'PLI00000004', 1, 'arrangementKey', 'ARK00000001', 'What a Beautiful Name', 'Key of B', 360),
+('PLI00000006', 'CHU00000001', 'PLA00000001', 'PLI00000004', 2, 'arrangementKey', 'ARK00000003', 'Good Good Father', 'Key of G', 345),
+('PLI00000007', 'CHU00000001', 'PLA00000001', 'PLI00000004', 3, 'arrangementKey', 'ARK00000007', 'Build My Life', 'Key of E', 355),
+('PLI00000008', 'CHU00000001', 'PLA00000001', 'PLI00000004', 4, 'item', NULL, 'Prayer and Offering', 'Michael leads prayer', 180),
 
--- Week 3 (March 17)
-('PLI00000005', 'CHU00000001', 'PLA00000001', NULL, 5, 'practice', 'TIM00000002', 'Thursday Practice - March 14', 'Practice for March 17 service', 7200),
-('PLI00000006', 'CHU00000001', 'PLA00000001', NULL, 6, 'service', 'TIM00000001', 'Sunday Service - March 17', 'Regular Sunday service', 5400),
+-- Scripture and Sermon Section
+('PLI00000009', 'CHU00000001', 'PLA00000001', NULL, 3, 'header', NULL, 'Scripture and Sermon', '', 0),
+('PLI00000010', 'CHU00000001', 'PLA00000001', 'PLI00000009', 1, 'item', NULL, 'Scripture Reading', 'Matthew 5:1-12 - The Beatitudes', 120),
+('PLI00000011', 'CHU00000001', 'PLA00000001', 'PLI00000009', 2, 'item', NULL, 'Sermon:', 'Pastor John - Living the Beatitudes', 1800),
 
--- Week 4 (March 24 - Easter)
-('PLI00000007', 'CHU00000001', 'PLA00000001', NULL, 7, 'practice', 'TIM00000002', 'Thursday Practice - March 21', 'Practice for Easter service', 7200),
-('PLI00000008', 'CHU00000001', 'PLA00000001', NULL, 8, 'service', 'TIM00000001', 'Easter Service - March 24', 'Special Easter service', 5400);
+-- Communion Section
+('PLI00000012', 'CHU00000001', 'PLA00000001', NULL, 4, 'header', NULL, 'Communion', '', 0),
+('PLI00000013', 'CHU00000001', 'PLA00000001', 'PLI00000012', 1, 'item', NULL, 'Communion Preparation', 'Pastor explains communion', 120),
+('PLI00000014', 'CHU00000001', 'PLA00000001', 'PLI00000012', 2, 'arrangementKey', 'ARK00000011', 'Amazing Grace', 'Key of G - during communion', 300),
+('PLI00000015', 'CHU00000001', 'PLA00000001', 'PLI00000012', 3, 'item', NULL, 'Communion Distribution', 'Deacons serve', 600),
+
+-- Closing Section
+('PLI00000016', 'CHU00000001', 'PLA00000001', NULL, 5, 'header', NULL, 'Closing', '', 0),
+('PLI00000017', 'CHU00000001', 'PLA00000001', 'PLI00000016', 1, 'arrangementKey', 'ARK00000009', 'Graves Into Gardens', 'Key of F# - closing song', 365),
+('PLI00000018', 'CHU00000001', 'PLA00000001', 'PLI00000016', 2, 'item', NULL, 'Announcements', 'Weekly announcements', 180),
+('PLI00000019', 'CHU00000001', 'PLA00000001', 'PLI00000016', 3, 'item', NULL, 'Benediction', 'Pastor John gives blessing', 60),
+('PLI00000020', 'CHU00000001', 'PLA00000001', 'PLI00000016', 4, 'item', NULL, 'Postlude', 'Instrumental music as people leave', 300);
+
 
 -- Create Assignments
 INSERT INTO assignments (id, churchId, positionId, personId, status, notified) VALUES
--- Week 1 Practice (Feb 29)
 ('ASS00000001', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis (Worship Leader)
 ('ASS00000002', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez (Acoustic Guitar)
 ('ASS00000003', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson (Electric Guitar)
 ('ASS00000004', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia (Bass)
 ('ASS00000005', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez (Drums)
 ('ASS00000006', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis (Keyboard)
-('ASS00000007', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia (Vocals)
-
--- Week 1 Service (March 3)
-('ASS00000008', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000009', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000010', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000011', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000012', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000013', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000014', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-('ASS00000015', 'CHU00000001', 'POS00000008', 'PER00000075', 'Accepted', '2024-02-15 10:00:00'), -- Steven White (Sound Tech)
-('ASS00000016', 'CHU00000001', 'POS00000009', 'PER00000076', 'Accepted', '2024-02-15 10:00:00'), -- Melissa White (Projection)
-('ASS00000017', 'CHU00000001', 'POS00000010', 'PER00000068', 'Accepted', '2024-02-15 10:00:00'), -- Kevin Martin (Greeter)
-('ASS00000018', 'CHU00000001', 'POS00000011', 'PER00000069', 'Accepted', '2024-02-15 10:00:00'), -- Rachel Martin (Usher)
-
--- Week 2 Practice (March 7)
-('ASS00000019', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000020', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000021', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000022', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000023', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000024', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000025', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-
--- Week 2 Service (March 10)
-('ASS00000026', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000027', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000028', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000029', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000030', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000031', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000032', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-('ASS00000033', 'CHU00000001', 'POS00000008', 'PER00000075', 'Accepted', '2024-02-15 10:00:00'), -- Steven White
-('ASS00000034', 'CHU00000001', 'POS00000009', 'PER00000076', 'Accepted', '2024-02-15 10:00:00'), -- Melissa White
-('ASS00000035', 'CHU00000001', 'POS00000010', 'PER00000068', 'Accepted', '2024-02-15 10:00:00'), -- Kevin Martin
-('ASS00000036', 'CHU00000001', 'POS00000011', 'PER00000069', 'Accepted', '2024-02-15 10:00:00'), -- Rachel Martin
-
--- Week 3 Practice (March 14)
-('ASS00000037', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000038', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000039', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000040', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000041', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000042', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000043', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-
--- Week 3 Service (March 17)
-('ASS00000044', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000045', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000046', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000047', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000048', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000049', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000050', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-('ASS00000051', 'CHU00000001', 'POS00000008', 'PER00000075', 'Accepted', '2024-02-15 10:00:00'), -- Steven White
-('ASS00000052', 'CHU00000001', 'POS00000009', 'PER00000076', 'Accepted', '2024-02-15 10:00:00'), -- Melissa White
-('ASS00000053', 'CHU00000001', 'POS00000010', 'PER00000068', 'Accepted', '2024-02-15 10:00:00'), -- Kevin Martin
-('ASS00000054', 'CHU00000001', 'POS00000011', 'PER00000069', 'Accepted', '2024-02-15 10:00:00'), -- Rachel Martin
-
--- Week 4 Practice (March 21)
-('ASS00000055', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000056', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000057', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000058', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000059', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000060', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000061', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-
--- Week 4 Service (March 24 - Easter)
-('ASS00000062', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis
-('ASS00000063', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez
-('ASS00000064', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson
-('ASS00000065', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia
-('ASS00000066', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez
-('ASS00000067', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis
-('ASS00000068', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'), -- Maria Garcia
-('ASS00000069', 'CHU00000001', 'POS00000008', 'PER00000075', 'Accepted', '2024-02-15 10:00:00'), -- Steven White
-('ASS00000070', 'CHU00000001', 'POS00000009', 'PER00000076', 'Accepted', '2024-02-15 10:00:00'), -- Melissa White
-('ASS00000071', 'CHU00000001', 'POS00000010', 'PER00000068', 'Accepted', '2024-02-15 10:00:00'), -- Kevin Martin
-('ASS00000072', 'CHU00000001', 'POS00000011', 'PER00000069', 'Accepted', '2024-02-15 10:00:00'); -- Rachel Martin
+('ASS00000007', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'); -- Maria Garcia (Vocals)
 
 -- Create Blockout Dates
 INSERT INTO blockoutDates (id, churchId, personId, startDate, endDate) VALUES
