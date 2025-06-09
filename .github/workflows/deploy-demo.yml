@@ -52,8 +52,8 @@ jobs:
 
   deploy:
     name: Deploy Demo
-    needs: cleanup
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -76,16 +76,12 @@ jobs:
           aws-region: us-east-2
 
       - name: Setup Serverless
-        run: export SERVERLESS_ACCESS_KEY="$SERVERLESS_ACCESS_KEY"
+        run:
+          |
+          export SERVERLESS_ACCESS_KEY="$SERVERLESS_ACCESS_KEY"
 
       - name: Deploy API
         run:
           |
           npm install
           npm run deploy-demo
-
-      - name: Serverless package contents
-        run:
-          |
-          npx serverless package --stage Demo
-          ls -R .serverless
