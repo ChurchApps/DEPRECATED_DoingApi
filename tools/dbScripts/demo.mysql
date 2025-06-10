@@ -1,131 +1,143 @@
--- This script should be run AFTER the tables are created
--- Run initdb.ts first to create the tables, then run this script
+DROP PROCEDURE IF EXISTS resetDemoData;
 
--- Truncate all tables in correct order (respecting foreign key constraints)
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE assignments;
-TRUNCATE TABLE blockoutDates;
-TRUNCATE TABLE notes;
-TRUNCATE TABLE planItems;
-TRUNCATE TABLE plans;
-TRUNCATE TABLE positions;
-TRUNCATE TABLE times;
-TRUNCATE TABLE tasks;
-TRUNCATE TABLE conditions;
-TRUNCATE TABLE automations;
-TRUNCATE TABLE actions;
-SET FOREIGN_KEY_CHECKS = 1;
+-- Create stored procedure to reset demo data
+DELIMITER //
+CREATE PROCEDURE resetDemoData()
+BEGIN
 
--- Create automation for birthday cards (must be created before tasks that reference it)
-INSERT INTO automations (id, churchId, title, recurs, active) VALUES
-('AUT00000001', 'CHU00000001', 'Birthday Card Automation', 'Daily', b'1');
+    -- This script should be run AFTER the tables are created
+    -- Run initdb.ts first to create the tables, then run this script
 
--- Create conditions for the birthday automation
-INSERT INTO conditions (id, churchId, conjunctionId, field, fieldData, operator, value, label) VALUES
-('CON00000001', 'CHU00000001', 'AUT00000001', 'status', '{"type": "member"}', 'equals', 'Active', 'Member Status is Active'),
-('CON00000002', 'CHU00000001', 'AUT00000001', 'age', '{"type": "member"}', 'greaterThan', '18', 'Member Age is over 18');
+    -- Truncate all tables in correct order (respecting foreign key constraints)
+    SET FOREIGN_KEY_CHECKS = 0;
+    TRUNCATE TABLE assignments;
+    TRUNCATE TABLE blockoutDates;
+    TRUNCATE TABLE notes;
+    TRUNCATE TABLE planItems;
+    TRUNCATE TABLE plans;
+    TRUNCATE TABLE positions;
+    TRUNCATE TABLE times;
+    TRUNCATE TABLE tasks;
+    TRUNCATE TABLE conditions;
+    TRUNCATE TABLE automations;
+    TRUNCATE TABLE actions;
+    SET FOREIGN_KEY_CHECKS = 1;
 
--- Create actions for the birthday automation
-INSERT INTO actions (id, churchId, automationId, actionType, actionData) VALUES
-('ACT00000001', 'CHU00000001', 'AUT00000001', 'CreateTask', '{"assignedTo": "PER00000069", "title": "Send Birthday Card to {memberName}", "description": "Send birthday card to {memberName} for their birthday on {birthday}. Address: {address}", "dueDate": "{birthday}", "daysBeforeDue": 7, "sortOrder": 1}');
+    -- Create automation for birthday cards (must be created before tasks that reference it)
+    INSERT INTO automations (id, churchId, title, recurs, active) VALUES
+    ('AUT00000001', 'CHU00000001', 'Birthday Card Automation', 'Daily', b'1');
 
--- Create Worship Ministry Positions
-INSERT INTO positions (id, churchId, planId, categoryName, name, count, groupId) VALUES
--- Sunday Morning Service Positions
-('POS00000001', 'CHU00000001', 'PLA00000001', 'Worship', 'Worship Leader', 1, 'GRP0000000b'),
-('POS00000002', 'CHU00000001', 'PLA00000001', 'Worship', 'Acoustic Guitar', 1, 'GRP0000000b'),
-('POS00000003', 'CHU00000001', 'PLA00000001', 'Worship', 'Electric Guitar', 1, 'GRP0000000b'),
-('POS00000004', 'CHU00000001', 'PLA00000001', 'Worship', 'Bass Guitar', 1, 'GRP0000000b'),
-('POS00000005', 'CHU00000001', 'PLA00000001', 'Worship', 'Drums', 1, 'GRP0000000b'),
-('POS00000006', 'CHU00000001', 'PLA00000001', 'Worship', 'Keyboard', 1, 'GRP0000000b'),
-('POS00000007', 'CHU00000001', 'PLA00000001', 'Worship', 'Vocals', 1, 'GRP0000000b'),
-('POS00000008', 'CHU00000001', 'PLA00000001', 'Technical', 'Sound Tech', 1, 'GRP0000000b'),
-('POS00000009', 'CHU00000001', 'PLA00000001', 'Technical', 'Projection Tech', 1, 'GRP0000000b'),
-('POS00000010', 'CHU00000001', 'PLA00000001', 'Hospitality', 'Greeter', 1, 'GRP0000000b'),
-('POS00000011', 'CHU00000001', 'PLA00000001', 'Hospitality', 'Usher', 1, 'GRP0000000b');
+    -- Create conditions for the birthday automation
+    INSERT INTO conditions (id, churchId, conjunctionId, field, fieldData, operator, value, label) VALUES
+    ('CON00000001', 'CHU00000001', 'AUT00000001', 'status', '{"type": "member"}', 'equals', 'Active', 'Member Status is Active'),
+    ('CON00000002', 'CHU00000001', 'AUT00000001', 'age', '{"type": "member"}', 'greaterThan', '18', 'Member Age is over 18');
 
--- Create Service Times
-INSERT INTO times (id, churchId, planId, displayName, startTime, endTime, teams) VALUES
-('TIM00000001', 'CHU00000001', NULL, 'Sunday Morning Service', '2024-03-03 10:00:00', '2024-03-03 11:30:00', NULL),
-('TIM00000002', 'CHU00000001', NULL, 'Thursday Practice', '2024-03-07 19:00:00', '2024-03-07 21:00:00', NULL);
+    -- Create actions for the birthday automation
+    INSERT INTO actions (id, churchId, automationId, actionType, actionData) VALUES
+    ('ACT00000001', 'CHU00000001', 'AUT00000001', 'CreateTask', '{"assignedTo": "PER00000069", "title": "Send Birthday Card to {memberName}", "description": "Send birthday card to {memberName} for their birthday on {birthday}. Address: {address}", "dueDate": "{birthday}", "daysBeforeDue": 7, "sortOrder": 1}');
 
--- Create Worship Plans
-INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes, serviceOrder) VALUES
-('PLA00000001', 'CHU00000001', 'GRP0000000a', 'March Worship Schedule', '2024-03-03', 'March worship services including special Easter service', 1);
+    -- Create Worship Ministry Positions
+    INSERT INTO positions (id, churchId, planId, categoryName, name, count, groupId) VALUES
+    -- Sunday Morning Service Positions
+    ('POS00000001', 'CHU00000001', 'PLA00000001', 'Worship', 'Worship Leader', 1, 'GRP0000000b'),
+    ('POS00000002', 'CHU00000001', 'PLA00000001', 'Worship', 'Acoustic Guitar', 1, 'GRP0000000b'),
+    ('POS00000003', 'CHU00000001', 'PLA00000001', 'Worship', 'Electric Guitar', 1, 'GRP0000000b'),
+    ('POS00000004', 'CHU00000001', 'PLA00000001', 'Worship', 'Bass Guitar', 1, 'GRP0000000b'),
+    ('POS00000005', 'CHU00000001', 'PLA00000001', 'Worship', 'Drums', 1, 'GRP0000000b'),
+    ('POS00000006', 'CHU00000001', 'PLA00000001', 'Worship', 'Keyboard', 1, 'GRP0000000b'),
+    ('POS00000007', 'CHU00000001', 'PLA00000001', 'Worship', 'Vocals', 1, 'GRP0000000b'),
+    ('POS00000008', 'CHU00000001', 'PLA00000001', 'Technical', 'Sound Tech', 1, 'GRP0000000b'),
+    ('POS00000009', 'CHU00000001', 'PLA00000001', 'Technical', 'Projection Tech', 1, 'GRP0000000b'),
+    ('POS00000010', 'CHU00000001', 'PLA00000001', 'Hospitality', 'Greeter', 1, 'GRP0000000b'),
+    ('POS00000011', 'CHU00000001', 'PLA00000001', 'Hospitality', 'Usher', 1, 'GRP0000000b');
 
--- Create Plan Items
-INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES
--- Week 1 (March 3)
-('PLI00000001', 'CHU00000001', 'PLA00000001', NULL, 1, 'header', NULL, 'Countdown Video', '', 0),
-('PLI00000002', 'CHU00000001', 'PLA00000001', 'PLI00000001', 1, 'item', NULL, 'Countdown Video', '', 600),
-('PLI00000003', 'CHU00000001', 'PLA00000001', 'PLI00000001', 2, 'item', NULL, 'Welcome and Opening Prayer', 'John leads', 120),
+    -- Create Service Times
+    INSERT INTO times (id, churchId, planId, displayName, startTime, endTime, teams) VALUES
+    ('TIM00000001', 'CHU00000001', NULL, 'Sunday Morning Service', '2024-03-03 10:00:00', '2024-03-03 11:30:00', NULL),
+    ('TIM00000002', 'CHU00000001', NULL, 'Thursday Practice', '2024-03-07 19:00:00', '2024-03-07 21:00:00', NULL);
 
--- Worship Section
-('PLI00000004', 'CHU00000001', 'PLA00000001', NULL, 2, 'header', NULL, 'Worship', '', 0),
-('PLI00000005', 'CHU00000001', 'PLA00000001', 'PLI00000004', 1, 'arrangementKey', 'ARK00000001', 'What a Beautiful Name', 'Key of B', 360),
-('PLI00000006', 'CHU00000001', 'PLA00000001', 'PLI00000004', 2, 'arrangementKey', 'ARK00000003', 'Good Good Father', 'Key of G', 345),
-('PLI00000007', 'CHU00000001', 'PLA00000001', 'PLI00000004', 3, 'arrangementKey', 'ARK00000007', 'Build My Life', 'Key of E', 355),
-('PLI00000008', 'CHU00000001', 'PLA00000001', 'PLI00000004', 4, 'item', NULL, 'Prayer and Offering', 'Michael leads prayer', 180),
+    -- Create Worship Plans
+    INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes, serviceOrder) VALUES
+    ('PLA00000001', 'CHU00000001', 'GRP0000000a', 'March Worship Schedule', '2024-03-03', 'March worship services including special Easter service', 1);
 
--- Scripture and Sermon Section
-('PLI00000009', 'CHU00000001', 'PLA00000001', NULL, 3, 'header', NULL, 'Scripture and Sermon', '', 0),
-('PLI00000010', 'CHU00000001', 'PLA00000001', 'PLI00000009', 1, 'item', NULL, 'Scripture Reading', 'Matthew 5:1-12 - The Beatitudes', 120),
-('PLI00000011', 'CHU00000001', 'PLA00000001', 'PLI00000009', 2, 'item', NULL, 'Sermon:', 'Pastor John - Living the Beatitudes', 1800),
+    -- Create Plan Items
+    INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES
+    -- Week 1 (March 3)
+    ('PLI00000001', 'CHU00000001', 'PLA00000001', NULL, 1, 'header', NULL, 'Countdown Video', '', 0),
+    ('PLI00000002', 'CHU00000001', 'PLA00000001', 'PLI00000001', 1, 'item', NULL, 'Countdown Video', '', 600),
+    ('PLI00000003', 'CHU00000001', 'PLA00000001', 'PLI00000001', 2, 'item', NULL, 'Welcome and Opening Prayer', 'John leads', 120),
 
--- Communion Section
-('PLI00000012', 'CHU00000001', 'PLA00000001', NULL, 4, 'header', NULL, 'Communion', '', 0),
-('PLI00000013', 'CHU00000001', 'PLA00000001', 'PLI00000012', 1, 'item', NULL, 'Communion Preparation', 'Pastor explains communion', 120),
-('PLI00000014', 'CHU00000001', 'PLA00000001', 'PLI00000012', 2, 'arrangementKey', 'ARK00000011', 'Amazing Grace', 'Key of G - during communion', 300),
-('PLI00000015', 'CHU00000001', 'PLA00000001', 'PLI00000012', 3, 'item', NULL, 'Communion Distribution', 'Deacons serve', 600),
+    -- Worship Section
+    ('PLI00000004', 'CHU00000001', 'PLA00000001', NULL, 2, 'header', NULL, 'Worship', '', 0),
+    ('PLI00000005', 'CHU00000001', 'PLA00000001', 'PLI00000004', 1, 'arrangementKey', 'ARK00000001', 'What a Beautiful Name', 'Key of B', 360),
+    ('PLI00000006', 'CHU00000001', 'PLA00000001', 'PLI00000004', 2, 'arrangementKey', 'ARK00000003', 'Good Good Father', 'Key of G', 345),
+    ('PLI00000007', 'CHU00000001', 'PLA00000001', 'PLI00000004', 3, 'arrangementKey', 'ARK00000007', 'Build My Life', 'Key of E', 355),
+    ('PLI00000008', 'CHU00000001', 'PLA00000001', 'PLI00000004', 4, 'item', NULL, 'Prayer and Offering', 'Michael leads prayer', 180),
 
--- Closing Section
-('PLI00000016', 'CHU00000001', 'PLA00000001', NULL, 5, 'header', NULL, 'Closing', '', 0),
-('PLI00000017', 'CHU00000001', 'PLA00000001', 'PLI00000016', 1, 'arrangementKey', 'ARK00000009', 'Graves Into Gardens', 'Key of F# - closing song', 365),
-('PLI00000018', 'CHU00000001', 'PLA00000001', 'PLI00000016', 2, 'item', NULL, 'Announcements', 'Weekly announcements', 180),
-('PLI00000019', 'CHU00000001', 'PLA00000001', 'PLI00000016', 3, 'item', NULL, 'Benediction', 'Pastor John gives blessing', 60),
-('PLI00000020', 'CHU00000001', 'PLA00000001', 'PLI00000016', 4, 'item', NULL, 'Postlude', 'Instrumental music as people leave', 300);
+    -- Scripture and Sermon Section
+    ('PLI00000009', 'CHU00000001', 'PLA00000001', NULL, 3, 'header', NULL, 'Scripture and Sermon', '', 0),
+    ('PLI00000010', 'CHU00000001', 'PLA00000001', 'PLI00000009', 1, 'item', NULL, 'Scripture Reading', 'Matthew 5:1-12 - The Beatitudes', 120),
+    ('PLI00000011', 'CHU00000001', 'PLA00000001', 'PLI00000009', 2, 'item', NULL, 'Sermon:', 'Pastor John - Living the Beatitudes', 1800),
+
+    -- Communion Section
+    ('PLI00000012', 'CHU00000001', 'PLA00000001', NULL, 4, 'header', NULL, 'Communion', '', 0),
+    ('PLI00000013', 'CHU00000001', 'PLA00000001', 'PLI00000012', 1, 'item', NULL, 'Communion Preparation', 'Pastor explains communion', 120),
+    ('PLI00000014', 'CHU00000001', 'PLA00000001', 'PLI00000012', 2, 'arrangementKey', 'ARK00000011', 'Amazing Grace', 'Key of G - during communion', 300),
+    ('PLI00000015', 'CHU00000001', 'PLA00000001', 'PLI00000012', 3, 'item', NULL, 'Communion Distribution', 'Deacons serve', 600),
+
+    -- Closing Section
+    ('PLI00000016', 'CHU00000001', 'PLA00000001', NULL, 5, 'header', NULL, 'Closing', '', 0),
+    ('PLI00000017', 'CHU00000001', 'PLA00000001', 'PLI00000016', 1, 'arrangementKey', 'ARK00000009', 'Graves Into Gardens', 'Key of F# - closing song', 365),
+    ('PLI00000018', 'CHU00000001', 'PLA00000001', 'PLI00000016', 2, 'item', NULL, 'Announcements', 'Weekly announcements', 180),
+    ('PLI00000019', 'CHU00000001', 'PLA00000001', 'PLI00000016', 3, 'item', NULL, 'Benediction', 'Pastor John gives blessing', 60),
+    ('PLI00000020', 'CHU00000001', 'PLA00000001', 'PLI00000016', 4, 'item', NULL, 'Postlude', 'Instrumental music as people leave', 300);
 
 
--- Create Assignments
-INSERT INTO assignments (id, churchId, positionId, personId, status, notified) VALUES
-('ASS00000001', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis (Worship Leader)
-('ASS00000002', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez (Acoustic Guitar)
-('ASS00000003', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson (Electric Guitar)
-('ASS00000004', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia (Bass)
-('ASS00000005', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez (Drums)
-('ASS00000006', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis (Keyboard)
-('ASS00000007', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'); -- Maria Garcia (Vocals)
+    -- Create Assignments
+    INSERT INTO assignments (id, churchId, positionId, personId, status, notified) VALUES
+    ('ASS00000001', 'CHU00000001', 'POS00000001', 'PER00000027', 'Accepted', '2024-02-15 10:00:00'), -- Michael Davis (Worship Leader)
+    ('ASS00000002', 'CHU00000001', 'POS00000002', 'PER00000042', 'Accepted', '2024-02-15 10:00:00'), -- David Lopez (Acoustic Guitar)
+    ('ASS00000003', 'CHU00000001', 'POS00000003', 'PER00000054', 'Accepted', '2024-02-15 10:00:00'), -- William Anderson (Electric Guitar)
+    ('ASS00000004', 'CHU00000001', 'POS00000004', 'PER00000021', 'Accepted', '2024-02-15 10:00:00'), -- Carlos Garcia (Bass)
+    ('ASS00000005', 'CHU00000001', 'POS00000005', 'PER00000036', 'Accepted', '2024-02-15 10:00:00'), -- Miguel Hernandez (Drums)
+    ('ASS00000006', 'CHU00000001', 'POS00000006', 'PER00000028', 'Accepted', '2024-02-15 10:00:00'), -- Emily Davis (Keyboard)
+    ('ASS00000007', 'CHU00000001', 'POS00000007', 'PER00000022', 'Accepted', '2024-02-15 10:00:00'); -- Maria Garcia (Vocals)
 
--- Create Blockout Dates
-INSERT INTO blockoutDates (id, churchId, personId, startDate, endDate) VALUES
-('BLK00000001', 'CHU00000001', 'PER00000027', '2024-03-15', '2024-03-20'), -- Michael Davis
-('BLK00000002', 'CHU00000001', 'PER00000042', '2024-03-22', '2024-03-24'), -- David Lopez
-('BLK00000003', 'CHU00000001', 'PER00000054', '2024-03-08', '2024-03-10'), -- William Anderson
-('BLK00000004', 'CHU00000001', 'PER00000021', '2024-03-01', '2024-03-03'), -- Carlos Garcia
-('BLK00000005', 'CHU00000001', 'PER00000036', '2024-03-29', '2024-03-31'); -- Miguel Hernandez
+    -- Create Blockout Dates
+    INSERT INTO blockoutDates (id, churchId, personId, startDate, endDate) VALUES
+    ('BLK00000001', 'CHU00000001', 'PER00000027', '2024-03-15', '2024-03-20'), -- Michael Davis
+    ('BLK00000002', 'CHU00000001', 'PER00000042', '2024-03-22', '2024-03-24'), -- David Lopez
+    ('BLK00000003', 'CHU00000001', 'PER00000054', '2024-03-08', '2024-03-10'), -- William Anderson
+    ('BLK00000004', 'CHU00000001', 'PER00000021', '2024-03-01', '2024-03-03'), -- Carlos Garcia
+    ('BLK00000005', 'CHU00000001', 'PER00000036', '2024-03-29', '2024-03-31'); -- Miguel Hernandez
 
--- Create Notes
-INSERT INTO notes (id, churchId, contentType, contentId, noteType, addedBy, createdAt, updatedAt, contents) VALUES
-('NOT00000001', 'CHU00000001', 'assignment', 'ASS00000001', 'General', 'PER00000027', '2024-02-15 10:00:00', '2024-02-15 10:00:00', 'Please prepare 4 songs for March 3 service'),
-('NOT00000002', 'CHU00000001', 'assignment', 'ASS00000062', 'General', 'PER00000027', '2024-02-20 14:30:00', '2024-02-20 14:30:00', 'Special Easter service - need 6 songs including resurrection hymns'),
-('NOT00000003', 'CHU00000001', 'assignment', 'ASS00000015', 'Technical', 'PER00000075', '2024-02-25 09:15:00', '2024-02-25 09:15:00', 'New microphone setup for March 3 service'),
-('NOT00000004', 'CHU00000001', 'assignment', 'ASS00000071', 'Hospitality', 'PER00000068', '2024-02-28 11:00:00', '2024-02-28 11:00:00', 'Extra greeters needed for Easter service');
+    -- Create Notes
+    INSERT INTO notes (id, churchId, contentType, contentId, noteType, addedBy, createdAt, updatedAt, contents) VALUES
+    ('NOT00000001', 'CHU00000001', 'assignment', 'ASS00000001', 'General', 'PER00000027', '2024-02-15 10:00:00', '2024-02-15 10:00:00', 'Please prepare 4 songs for March 3 service'),
+    ('NOT00000002', 'CHU00000001', 'assignment', 'ASS00000062', 'General', 'PER00000027', '2024-02-20 14:30:00', '2024-02-20 14:30:00', 'Special Easter service - need 6 songs including resurrection hymns'),
+    ('NOT00000003', 'CHU00000001', 'assignment', 'ASS00000015', 'Technical', 'PER00000075', '2024-02-25 09:15:00', '2024-02-25 09:15:00', 'New microphone setup for March 3 service'),
+    ('NOT00000004', 'CHU00000001', 'assignment', 'ASS00000071', 'Hospitality', 'PER00000068', '2024-02-28 11:00:00', '2024-02-28 11:00:00', 'Extra greeters needed for Easter service');
 
--- Create sample tasks (after automations are created)
-INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status, automationId, conversationId, data) VALUES
--- Visitor Follow-up Tasks
-('TSK00000001', 'CHU00000001', 1, 'FollowUp', '2024-03-03 12:00:00', NULL, 'Person', 'PER00000001', 'John Smith', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000068', 'Kevin Martin', 'Invite New Visitor to Lunch', 'Pending', NULL, NULL, '{"description": "Follow up with John Smith who visited on March 3", "dueDate": "2024-03-10"}'),
-('TSK00000002', 'CHU00000001', 2, 'FollowUp', '2024-03-03 12:00:00', NULL, 'Family', 'FAM00000001', 'Johnson Family', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000069', 'Rachel Martin', 'Send Welcome Package', 'Pending', NULL, NULL, '{"description": "Mail welcome package to the Johnson family", "dueDate": "2024-03-05"}'),
-('TSK00000003', 'CHU00000001', 3, 'FollowUp', '2024-03-03 12:00:00', NULL, 'Person', 'PER00000002', 'Maria Rodriguez', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000075', 'Steven White', 'Schedule New Member Class', 'Pending', NULL, NULL, '{"description": "Contact Maria Rodriguez about next new member class", "dueDate": "2024-03-08"}'),
+    -- Create sample tasks (after automations are created)
+    INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status, automationId, conversationId, data) VALUES
+    -- Visitor Follow-up Tasks
+    ('TSK00000001', 'CHU00000001', 1, 'FollowUp', '2024-03-03 12:00:00', NULL, 'Person', 'PER00000001', 'John Smith', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000068', 'Kevin Martin', 'Invite New Visitor to Lunch', 'Pending', NULL, NULL, '{"description": "Follow up with John Smith who visited on March 3", "dueDate": "2024-03-10"}'),
+    ('TSK00000002', 'CHU00000001', 2, 'FollowUp', '2024-03-03 12:00:00', NULL, 'Family', 'FAM00000001', 'Johnson Family', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000069', 'Rachel Martin', 'Send Welcome Package', 'Pending', NULL, NULL, '{"description": "Mail welcome package to the Johnson family", "dueDate": "2024-03-05"}'),
+    ('TSK00000003', 'CHU00000001', 3, 'FollowUp', '2024-03-03 12:00:00', NULL, 'Person', 'PER00000002', 'Maria Rodriguez', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000075', 'Steven White', 'Schedule New Member Class', 'Pending', NULL, NULL, '{"description": "Contact Maria Rodriguez about next new member class", "dueDate": "2024-03-08"}'),
 
--- Ministry Support Tasks
-('TSK00000004', 'CHU00000001', 4, 'Ministry', '2024-03-01 09:00:00', NULL, 'Ministry', 'MIN00000001', 'Communion Ministry', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000076', 'Melissa White', 'Order Communion Supplies', 'Pending', NULL, NULL, '{"description": "Order new communion cups and juice for April", "dueDate": "2024-03-15"}'),
-('TSK00000005', 'CHU00000001', 5, 'Ministry', '2024-03-01 09:00:00', NULL, 'Ministry', 'MIN00000002', 'Worship Ministry', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000027', 'Michael Davis', 'Update Worship Song List', 'Pending', NULL, NULL, '{"description": "Update the song database with new Easter songs", "dueDate": "2024-03-20"}'),
+    -- Ministry Support Tasks
+    ('TSK00000004', 'CHU00000001', 4, 'Ministry', '2024-03-01 09:00:00', NULL, 'Ministry', 'MIN00000001', 'Communion Ministry', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000076', 'Melissa White', 'Order Communion Supplies', 'Pending', NULL, NULL, '{"description": "Order new communion cups and juice for April", "dueDate": "2024-03-15"}'),
+    ('TSK00000005', 'CHU00000001', 5, 'Ministry', '2024-03-01 09:00:00', NULL, 'Ministry', 'MIN00000002', 'Worship Ministry', 'Person', 'PER00000027', 'Michael Davis', 'Person', 'PER00000027', 'Michael Davis', 'Update Worship Song List', 'Pending', NULL, NULL, '{"description": "Update the song database with new Easter songs", "dueDate": "2024-03-20"}'),
 
--- Pastoral Care Tasks
-('TSK00000006', 'CHU00000001', 6, 'Care', '2024-03-03 15:00:00', NULL, 'Person', 'PER00000003', 'Sarah Thompson', 'Person', 'PER00000068', 'Kevin Martin', 'Person', 'PER00000027', 'Michael Davis', 'Visit Hospitalized Member', 'Pending', NULL, NULL, '{"description": "Visit Sarah Thompson at City General Hospital", "dueDate": "2024-03-04"}'),
-('TSK00000007', 'CHU00000001', 7, 'Care', '2024-03-03 16:00:00', NULL, 'Person', 'PER00000004', 'James Wilson', 'Person', 'PER00000069', 'Rachel Martin', 'Person', 'PER00000027', 'Michael Davis', 'Follow-up Prayer Request', 'Pending', NULL, NULL, '{"description": "Call back regarding prayer request from James Wilson", "dueDate": "2024-03-05"}'),
+    -- Pastoral Care Tasks
+    ('TSK00000006', 'CHU00000001', 6, 'Care', '2024-03-03 15:00:00', NULL, 'Person', 'PER00000003', 'Sarah Thompson', 'Person', 'PER00000068', 'Kevin Martin', 'Person', 'PER00000027', 'Michael Davis', 'Visit Hospitalized Member', 'Pending', NULL, NULL, '{"description": "Visit Sarah Thompson at City General Hospital", "dueDate": "2024-03-04"}'),
+    ('TSK00000007', 'CHU00000001', 7, 'Care', '2024-03-03 16:00:00', NULL, 'Person', 'PER00000004', 'James Wilson', 'Person', 'PER00000069', 'Rachel Martin', 'Person', 'PER00000027', 'Michael Davis', 'Follow-up Prayer Request', 'Pending', NULL, NULL, '{"description": "Call back regarding prayer request from James Wilson", "dueDate": "2024-03-05"}'),
 
--- Birthday Card Tasks
-('TSK00000008', 'CHU00000001', 8, 'Automation', '2024-03-01 00:00:00', NULL, 'Person', 'PER00000028', 'Emily Davis', 'Automation', 'AUT00000001', 'Birthday Card Automation', 'Person', 'PER00000069', 'Rachel Martin', 'Send Birthday Card to Emily Davis', 'Pending', 'AUT00000001', NULL, '{"description": "Send birthday card to Emily Davis for their birthday on 2024-03-15. Address: 123 Main St, Anytown, USA", "dueDate": "2024-03-08"}'),
-('TSK00000009', 'CHU00000001', 9, 'Automation', '2024-03-01 00:00:00', NULL, 'Person', 'PER00000029', 'Michael Wilson', 'Automation', 'AUT00000001', 'Birthday Card Automation', 'Person', 'PER00000069', 'Rachel Martin', 'Send Birthday Card to Michael Wilson', 'Pending', 'AUT00000001', NULL, '{"description": "Send birthday card to Michael Wilson for their birthday on 2024-03-20. Address: 456 Oak Ave, Anytown, USA", "dueDate": "2024-03-13"}'); 
+    -- Birthday Card Tasks
+    ('TSK00000008', 'CHU00000001', 8, 'Automation', '2024-03-01 00:00:00', NULL, 'Person', 'PER00000028', 'Emily Davis', 'Automation', 'AUT00000001', 'Birthday Card Automation', 'Person', 'PER00000069', 'Rachel Martin', 'Send Birthday Card to Emily Davis', 'Pending', 'AUT00000001', NULL, '{"description": "Send birthday card to Emily Davis for their birthday on 2024-03-15. Address: 123 Main St, Anytown, USA", "dueDate": "2024-03-08"}'),
+    ('TSK00000009', 'CHU00000001', 9, 'Automation', '2024-03-01 00:00:00', NULL, 'Person', 'PER00000029', 'Michael Wilson', 'Automation', 'AUT00000001', 'Birthday Card Automation', 'Person', 'PER00000069', 'Rachel Martin', 'Send Birthday Card to Michael Wilson', 'Pending', 'AUT00000001', NULL, '{"description": "Send birthday card to Michael Wilson for their birthday on 2024-03-20. Address: 456 Oak Ave, Anytown, USA", "dueDate": "2024-03-13"}');
+END //
+DELIMITER ;
+
+-- Execute the stored procedure to populate demo data
+CALL resetDemoData(); 
