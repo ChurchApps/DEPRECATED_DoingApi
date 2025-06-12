@@ -5,11 +5,13 @@
   ],
   "jsRules": {},
   "rules": {
-      "trailing-comma": [
-          false
-      ],
+      "trailing-comma": false,
       "no-console": false,
-      "no-bitwise": false
+      "no-bitwise": false,
+      "object-literal-key-quotes": [true, "as-needed"],
+      "array-type": [true, "array"],
+      "prefer-for-of": true,
+      "prefer-const": true
   },
   "rulesDirectory": []
 }

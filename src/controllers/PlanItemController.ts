@@ -9,7 +9,8 @@ export class PlanItemController extends DoingBaseController {
   @httpGet("/ids")
   public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
-      const idsString = req.query.ids as string;
+      const idsString = req.query.ids?.toString();
+      if (!idsString) return this.json({ error: "Missing required parameter: ids" });
       const ids = idsString.split(",");
       return await this.repositories.planItem.loadByIds(au.churchId, ids);
     });

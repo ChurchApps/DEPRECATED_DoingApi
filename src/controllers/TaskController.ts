@@ -64,18 +64,10 @@ export class TaskController extends DoingBaseController {
     });
   }
 
-  /*
-  @httpDelete("/:id")
-  public async delete(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
-      await this.repositories.task.delete(au.churchId, id);
-      return this.json({});
-    });
-  }
-  */
 
   private async savePhoto(churchId: string, base64Str: string, task: Task) {
-    const base64 = base64Str.split(",")[1];
+    const base64Parts = base64Str.split(",");
+    const base64 = base64Parts.length > 1 ? base64Parts[1] : "";
     const key = "/" + churchId + "/membership/people/" + task.associatedWithId + ".png";
     await FileStorageHelper.store(key, "image/png", Buffer.from(base64, "base64"));
     const photoUpdated = new Date();
@@ -85,7 +77,10 @@ export class TaskController extends DoingBaseController {
 
   private async handleDirectoryUpdate (churchId: string, task: Task) {
     if (task.status === "Open") {
-      const data = JSON.parse(task.data);
+      const data = task.data ? (() => {
+        try { return JSON.parse(task.data); }
+        catch { return []; }
+      })() : [];
       for (const d of data) {
         if (d.field === "photo" && d.value !== undefined) {
           d.value = await this.savePhoto(churchId, d.value, task);

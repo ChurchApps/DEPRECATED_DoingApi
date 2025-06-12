@@ -15,7 +15,7 @@ export class PlanHelper {
     positions.forEach(p => {
       const assignedCount = assignments.filter(a => a.positionId === p.id).length;
       if (p.count>assignedCount) {
-        const availablePeople = teams.find(t => t.positionId === p.id)?.personIds.filter(p => unavailablePeople.indexOf(p)===-1) || [];
+        const availablePeople = teams.find(t => t.positionId === p.id)?.personIds.filter(personId => unavailablePeople.indexOf(personId)===-1) || [];
         neededPositions.push({position:p, needed:p.count-assignedCount, availablePeople});
       }
     });

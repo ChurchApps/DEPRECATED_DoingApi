@@ -1,11 +1,16 @@
 service: doing-api
-variablesResolutionMode: 20210326
+
+useDotenv: true
 
 custom:
-  serverless-layers:
-    dependenciesPath: ./package.json
-    layersDeploymentBucket: ${env:SERVERLESS_LAYERS_BUCKET, 'lcs-layers'}
-  env: ${lower(${opt:stage, self:provider.stage})}
+  stage: ${opt:stage, 'dev'}
+  env: ${lower(${self:custom.stage})}
+  layerName: ${self:service}-dependencies-${self:custom.stage}
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3002
+    useChildProcesses: true
+    noTimeout: true
   vpcSettings:
     prod:
       securityGroupIds: ${split(${env:SECURITY_GROUP_IDS, 'sg-052314a1eec2f2567'}, ',')}
@@ -14,26 +19,63 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: nodejs20.x
   memorySize: 1024
   timeout: 10
   region: ${env:AWS_REGION, 'us-east-2'}
+  stage: ${self:custom.stage}
   iam:
     role: arn:aws:iam::${aws:accountId}:role/ChurchAppsRole
   environment:
     APP_ENV: ${self:custom.env}
 
+package:
+  individually: true
+  patterns:
+    - "!.git/**"
+    - "!.gitignore"
+    - "!README.md"
+    - "!*.md"
+
+layers:
+  dependencies:
+    name: ${self:custom.layerName}
+    path: layer
+    retain: false
+
 functions:
   api:
+    name: doing-api-${self:custom.stage}-api
     handler: lambda.universal
+    layers:
+      - { Ref: DependenciesLambdaLayer }
     events:
-      - http: ANY {proxy+}
-      - http: ANY /
+      - http:
+          path: /{proxy+}
+          method: ANY
+      - http:
+          path: /
+          method: ANY
     vpc: ${self:custom.vpcSettings.current}
+    package:
+      patterns:
+        - "!package-lock.json"
+        - "!tsconfig.json"
+        - "!src/**"
+        - "!tools/**"
+        - "!*.md"
+        - "!Dockerfile"
+        - "!.git/**"
+        - "!.gitignore"
+        - "!README.md"
+        - "!node_modules/**"
   nightly:
+    name: doing-api-${self:custom.stage}-nightly
     handler: lambda.nightly
+    layers:
+      - { Ref: DependenciesLambdaLayer }
     vpc: ${self:custom.vpcSettings.current}
 
 plugins:
-  - serverless-layers
   - serverless-plugin-utils
+  - serverless-offline

@@ -18,7 +18,8 @@ export class PlanController extends DoingBaseController {
   @httpGet("/ids")
   public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
-      const idsString = req.query.ids as string;
+      const idsString = req.query.ids?.toString();
+      if (!idsString) return this.json({ error: "Missing required parameter: ids" });
       const ids = idsString.split(",");
       return await this.repositories.plan.loadByIds(au.churchId, ids);
     });
@@ -27,9 +28,7 @@ export class PlanController extends DoingBaseController {
   @httpGet("/:id")
   public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapper(req, res, async (au) => {
-      const result = await this.repositories.plan.load(au.churchId, id);
-      console.log(result);
-      return result;
+      return await this.repositories.plan.load(au.churchId, id);
     });
   }
 
@@ -111,7 +110,8 @@ export class PlanController extends DoingBaseController {
       const updatePromises: Promise<any>[] = [];
       for (const pi of newPlanItems) {
         if (pi.parentId && idMap.has(pi.parentId)) {
-          pi.parentId = idMap.get(pi.parentId);
+          const newParentId = idMap.get(pi.parentId);
+          if (newParentId) pi.parentId = newParentId;
           updatePromises.push(this.repositories.planItem.save(pi));
         }
       }

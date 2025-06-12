@@ -35,8 +35,8 @@ export class ConjunctionHelper {
     parent.conjunctions.forEach(c => { peopleArrays.push(this.getPeopleFromTree(c)) })
 
     if (parent.groupType === "OR") {
-      peopleArrays.forEach(pa => { if (pa.length === 0 && pa[0] === "*") result = ["*"]; })
-      if (result.length === 0) peopleArrays.forEach(pa => { result.concat(pa); })
+      peopleArrays.forEach(pa => { if (pa.length === 1 && pa[0] === "*") result = ["*"]; })
+      if (result.length === 0) peopleArrays.forEach(pa => { result = result.concat(pa); })
     } else {
       peopleArrays.forEach(pa => {
         let allPeople = true;
