@@ -30,7 +30,7 @@ export class PoolHelper {
       multipleStatements: true,
       waitForConnections: true,
       queueLimit: 50,
-      typeCast: function castField(field, useDefaultTypeCasting) {
+      typeCast: function castField(field: any, useDefaultTypeCasting: any) {
         // convert bit(1) to bool
         if ((field.type === "BIT") && (field.length === 1)) {
           try {

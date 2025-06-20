@@ -1,28 +1,25 @@
 import { PoolHelper } from "./PoolHelper";
-import { PoolConnection, MysqlError, queryCallback } from "mysql";
+import { PoolConnection } from "mysql2/promise";
 import { LoggingHelper } from "@churchapps/apihelper";
 
 export class DBHelper {
 
   // wraps in promise
   static async getConnection(databaseName: string) {
-    const promise: Promise<PoolConnection> = new Promise((resolve, reject) => {
-      PoolHelper.getPool(databaseName).getConnection((ex: MysqlError, conn: PoolConnection) => { if (ex) reject(ex); else resolve(conn); });
-    });;
-    const connection: PoolConnection = await promise;
+    const pool = PoolHelper.getPool(databaseName);
+    const connection = await pool.getConnection();
     return connection;
   }
 
   // wraps in promise
   static async getQuery(connection: PoolConnection, sql: string, params: any[]) {
-    const promise: Promise<queryCallback> = new Promise((resolve, reject) => {
-      connection.query(sql, params, async (ex, rows) => {
-        if (ex) { LoggingHelper.getCurrent().error(ex); reject(ex); }
-        else { resolve(rows); }
-      });
-    });
-    const query: queryCallback = await promise;
-    return query;
+    try {
+      const [rows] = await connection.query(sql, params);
+      return rows;
+    } catch (ex) {
+      LoggingHelper.getCurrent().error(ex);
+      throw ex;
+    }
   }
 
   public static async query(db: string, sql: string, params: any[]) {
