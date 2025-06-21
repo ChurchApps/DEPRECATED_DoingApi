@@ -1,11 +1,10 @@
 import { injectable } from "inversify";
-import { UniqueIdHelper } from "@churchapps/apihelper"
-import { DB } from "@churchapps/apihelper"
+import { UniqueIdHelper } from "@churchapps/apihelper";
+import { DB } from "@churchapps/apihelper";
 import { Automation } from "../models";
 
 @injectable()
 export class AutomationRepository {
-
   public save(automation: Automation) {
     return automation.id ? this.update(automation) : this.create(automation);
   }
@@ -41,5 +40,4 @@ export class AutomationRepository {
   public loadAllChurches() {
     return DB.query("SELECT * FROM automations;", []);
   }
-
 }

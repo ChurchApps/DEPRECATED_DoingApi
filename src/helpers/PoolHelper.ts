@@ -5,7 +5,7 @@ import { ArrayHelper } from "@churchapps/apihelper";
 dotenv.config();
 
 export class PoolHelper {
-  public static pools: { name: string, pool: mysql.Pool }[] = [];
+  public static pools: { name: string; pool: mysql.Pool }[] = [];
 
   public static getPool(databaseName: string) {
     let result = ArrayHelper.getOne(PoolHelper.pools, "name", databaseName);
@@ -17,7 +17,7 @@ export class PoolHelper {
   }
 
   public static initPool(databaseName: string) {
-    const connectionString = process.env["CONNECTION_STRING_" + databaseName.toUpperCase()]
+    const connectionString = process.env["CONNECTION_STRING_" + databaseName.toUpperCase()];
     const config = this.getConfig(connectionString);
 
     const pool = mysql.createPool({
@@ -30,18 +30,23 @@ export class PoolHelper {
       multipleStatements: true,
       waitForConnections: true,
       queueLimit: 50,
-      typeCast: function castField(field: any, useDefaultTypeCasting: any) {
+      typeCast: function castField(
+        field: { type: string; length: number; buffer: () => Buffer },
+        useDefaultTypeCasting: () => unknown
+      ) {
         // convert bit(1) to bool
-        if ((field.type === "BIT") && (field.length === 1)) {
+        if (field.type === "BIT" && field.length === 1) {
           try {
             const bytes = field.buffer();
-            return (bytes[0] === 1);
-          } catch (e) { return false; }
+            return bytes[0] === 1;
+          } catch {
+            return false;
+          }
         }
-        return (useDefaultTypeCasting());
+        return useDefaultTypeCasting();
       }
     });
-    PoolHelper.pools.push({ name: databaseName, pool })
+    PoolHelper.pools.push({ name: databaseName, pool });
   }
 
   // a bit of a hack
@@ -54,14 +59,10 @@ export class PoolHelper {
 
     const hostDb = firstSplit[1].split("/");
     const database = hostDb[1];
-    const hostPort = hostDb[0].split(':');
+    const hostPort = hostDb[0].split(":");
     const host = hostPort[0];
-    const port = parseInt(hostPort[1], 0)
+    const port = parseInt(hostPort[1], 0);
 
-    return { host, port, database, userName, password }
-
-  }
-
+    return { host, port, database, userName, password };
+  };
 }
-
-

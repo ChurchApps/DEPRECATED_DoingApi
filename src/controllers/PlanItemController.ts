@@ -1,15 +1,17 @@
 import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
-import { DoingBaseController } from "./DoingBaseController"
-import { PlanItem } from "../models"
+import { DoingBaseController } from "./DoingBaseController";
+import { PlanItem } from "../models";
 
 @controller("/planItems")
 export class PlanItemController extends DoingBaseController {
-
   @httpGet("/ids")
-  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
-      const idsString = req.query.ids?.toString();
+  public async getByIds(
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
+      const idsString = typeof req.query.ids === "string" ? req.query.ids : req.query.ids ? String(req.query.ids) : "";
       if (!idsString) return this.json({ error: "Missing required parameter: ids" });
       const ids = idsString.split(",");
       return await this.repositories.planItem.loadByIds(au.churchId, ids);
@@ -17,14 +19,23 @@ export class PlanItemController extends DoingBaseController {
   }
 
   @httpGet("/:id")
-  public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async get(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       return await this.repositories.planItem.load(au.churchId, id);
     });
   }
 
   @httpGet("/presenter/:churchId/:planId")
-  public async getForPresenter(@requestParam("churchId") churchId: string, @requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+  public async getForPresenter(
+    @requestParam("churchId") churchId: string,
+    @requestParam("planId") planId: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
     return this.actionWrapperAnon(req, res, async () => {
       const result = await this.repositories.planItem.loadForPlan(churchId, planId);
       return this.buildTree(result, null);
@@ -32,16 +43,23 @@ export class PlanItemController extends DoingBaseController {
   }
 
   @httpGet("/plan/:planId")
-  public async getByPlan(@requestParam("planId") planId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async getByPlan(
+    @requestParam("planId") planId: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       const result = await this.repositories.planItem.loadForPlan(au.churchId, planId);
       return this.buildTree(result, null);
     });
   }
 
   @httpPost("/sort")
-  public async sort(req: express.Request<{}, {}, PlanItem>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async sort(
+    req: express.Request<{}, {}, PlanItem>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       await this.repositories.planItem.save(req.body);
 
       const items = await this.repositories.planItem.loadForPlan(au.churchId, req.body.planId);
@@ -56,8 +74,11 @@ export class PlanItemController extends DoingBaseController {
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, PlanItem[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async save(
+    req: express.Request<{}, {}, PlanItem[]>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       const promises: Promise<PlanItem>[] = [];
       req.body.forEach(planItem => {
         planItem.churchId = au.churchId;
@@ -69,8 +90,12 @@ export class PlanItemController extends DoingBaseController {
   }
 
   @httpDelete("/:id")
-  public async delete(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async delete(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       await this.repositories.planItem.delete(au.churchId, id);
       return this.json({});
     });
@@ -86,6 +111,4 @@ export class PlanItemController extends DoingBaseController {
     });
     return result;
   }
-
-
 }

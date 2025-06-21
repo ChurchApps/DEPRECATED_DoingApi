@@ -1,28 +1,38 @@
 import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
-import { DoingBaseController } from "./DoingBaseController"
-import { Action } from "../models"
+import { DoingBaseController } from "./DoingBaseController";
+import { Action } from "../models";
 
 @controller("/actions")
 export class ActionController extends DoingBaseController {
-
   @httpGet("/:id")
-  public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async get(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       return await this.repositories.action.load(au.churchId, id);
     });
   }
 
   @httpGet("/automation/:id")
-  public async getForAutomation(@requestParam("id") automationId: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async getForAutomation(
+    @requestParam("id") automationId: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       return await this.repositories.action.loadForAutomation(au.churchId, automationId);
     });
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Action[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async save(
+    req: express.Request<{}, {}, Action[]>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       const promises: Promise<Action>[] = [];
       req.body.forEach(action => {
         action.churchId = au.churchId;
@@ -34,11 +44,14 @@ export class ActionController extends DoingBaseController {
   }
 
   @httpDelete("/:id")
-  public async delete(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async delete(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       await this.repositories.action.delete(au.churchId, id);
       return this.json({});
     });
   }
-
 }

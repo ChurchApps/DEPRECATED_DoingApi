@@ -1,11 +1,10 @@
 import { injectable } from "inversify";
-import { UniqueIdHelper } from "@churchapps/apihelper"
-import { DB } from "@churchapps/apihelper"
+import { UniqueIdHelper } from "@churchapps/apihelper";
+import { DB } from "@churchapps/apihelper";
 import { PlanItem } from "../models";
 
 @injectable()
 export class PlanItemRepository {
-
   public save(planItem: PlanItem) {
     return planItem.id ? this.update(planItem) : this.create(planItem);
   }
@@ -13,15 +12,39 @@ export class PlanItemRepository {
   private async create(planItem: PlanItem) {
     planItem.id = UniqueIdHelper.shortId();
 
-    const sql = "INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    const params = [planItem.id, planItem.churchId, planItem.planId, planItem.parentId, planItem.sort, planItem.itemType, planItem.relatedId, planItem.label, planItem.description, planItem.seconds];
+    const sql =
+      "INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    const params = [
+      planItem.id,
+      planItem.churchId,
+      planItem.planId,
+      planItem.parentId,
+      planItem.sort,
+      planItem.itemType,
+      planItem.relatedId,
+      planItem.label,
+      planItem.description,
+      planItem.seconds
+    ];
     await DB.query(sql, params);
     return planItem;
   }
 
   private async update(planItem: PlanItem) {
-    const sql = "UPDATE planItems SET planId=?, parentId=?, sort=?, itemType=?, relatedId=?, label=?, description=?, seconds=? WHERE id=? and churchId=?";
-    const params = [planItem.planId, planItem.parentId, planItem.sort, planItem.itemType, planItem.relatedId, planItem.label, planItem.description, planItem.seconds, planItem.id, planItem.churchId];
+    const sql =
+      "UPDATE planItems SET planId=?, parentId=?, sort=?, itemType=?, relatedId=?, label=?, description=?, seconds=? WHERE id=? and churchId=?";
+    const params = [
+      planItem.planId,
+      planItem.parentId,
+      planItem.sort,
+      planItem.itemType,
+      planItem.relatedId,
+      planItem.label,
+      planItem.description,
+      planItem.seconds,
+      planItem.id,
+      planItem.churchId
+    ];
     await DB.query(sql, params);
     return planItem;
   }
@@ -45,5 +68,4 @@ export class PlanItemRepository {
   public loadForPlan(churchId: string, planId: string) {
     return DB.query("SELECT * FROM planItems WHERE churchId=? and planId=? ORDER BY sort", [churchId, planId]);
   }
-
 }

@@ -3,7 +3,6 @@ import { PoolConnection } from "mysql2/promise";
 import { LoggingHelper } from "@churchapps/apihelper";
 
 export class DBHelper {
-
   // wraps in promise
   static async getConnection(databaseName: string) {
     const pool = PoolHelper.getPool(databaseName);
@@ -12,7 +11,7 @@ export class DBHelper {
   }
 
   // wraps in promise
-  static async getQuery(connection: PoolConnection, sql: string, params: any[]) {
+  static async getQuery(connection: PoolConnection, sql: string, params: unknown[]) {
     try {
       const [rows] = await connection.query(sql, params);
       return rows;
@@ -22,14 +21,16 @@ export class DBHelper {
     }
   }
 
-  public static async query(db: string, sql: string, params: any[]) {
-    let result: any = null;
+  public static async query(db: string, sql: string, params: unknown[]) {
+    let result: unknown = null;
     const connection = await this.getConnection(db);
-    try { result = await this.getQuery(connection, sql, params); }
-    catch (ex) { LoggingHelper.getCurrent().error(ex); }
-    finally { connection.release(); }
+    try {
+      result = await this.getQuery(connection, sql, params);
+    } catch (ex) {
+      LoggingHelper.getCurrent().error(ex);
+    } finally {
+      connection.release();
+    }
     return result;
   }
-
-
 }

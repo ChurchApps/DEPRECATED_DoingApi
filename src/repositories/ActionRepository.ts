@@ -1,11 +1,10 @@
 import { injectable } from "inversify";
-import { UniqueIdHelper } from "@churchapps/apihelper"
-import { DB } from "@churchapps/apihelper"
+import { UniqueIdHelper } from "@churchapps/apihelper";
+import { DB } from "@churchapps/apihelper";
 import { Action } from "../models";
 
 @injectable()
 export class ActionRepository {
-
   public save(action: Action) {
     return action.id ? this.update(action) : this.create(action);
   }
@@ -37,5 +36,4 @@ export class ActionRepository {
   public loadForAutomation(churchId: string, automationId: string) {
     return DB.query("SELECT * FROM actions WHERE automationId=? AND churchId=?;", [automationId, churchId]);
   }
-
 }

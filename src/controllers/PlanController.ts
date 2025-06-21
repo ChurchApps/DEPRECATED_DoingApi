@@ -1,24 +1,28 @@
 import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
-import { DoingBaseController } from "./DoingBaseController"
-import { Plan, PlanItem, Position, Time } from "../models"
+import { DoingBaseController } from "./DoingBaseController";
+import { Plan, PlanItem, Position, Time } from "../models";
 import { PlanHelper } from "../helpers/PlanHelper";
 
 @controller("/plans")
 export class PlanController extends DoingBaseController {
-
   @httpGet("/presenter")
-  public async getForPresenter(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async getForPresenter(
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       return await this.repositories.plan.load7Days(au.churchId);
     });
   }
 
-
   @httpGet("/ids")
-  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
-      const idsString = req.query.ids?.toString();
+  public async getByIds(
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
+      const idsString = typeof req.query.ids === "string" ? req.query.ids : req.query.ids ? String(req.query.ids) : "";
       if (!idsString) return this.json({ error: "Missing required parameter: ids" });
       const ids = idsString.split(",");
       return await this.repositories.plan.loadByIds(au.churchId, ids);
@@ -26,15 +30,22 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpGet("/:id")
-  public async get(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async get(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       return await this.repositories.plan.load(au.churchId, id);
     });
   }
 
   @httpGet("/")
-  public async getForAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async getForAll(
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       return await this.repositories.plan.loadAll(au.churchId);
     });
   }
@@ -47,26 +58,31 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpPost("/autofill/:id")
-  public async autofill(@requestParam("id") id: string, req: express.Request<{}, {}, { teams: { positionId: string, personIds: string[] }[] }>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
-
+  public async autofill(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, { teams: { positionId: string; personIds: string[] }[] }>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       const plan = await this.repositories.plan.load(au.churchId, id);
       const positions: Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
       const assignments = await this.repositories.assignment.loadByPlanId(au.churchId, id);
       const blockoutDates = await this.repositories.blockoutDate.loadUpcoming(au.churchId);
       const lastServed = await this.repositories.assignment.loadLastServed(au.churchId);
 
-      PlanHelper.autofill(positions, assignments, blockoutDates, req.body.teams, lastServed);
-
+      await PlanHelper.autofill(positions, assignments, blockoutDates, req.body.teams, lastServed);
 
       return plan;
     });
   }
 
   @httpPost("/copy/:id")
-  public async copy(@requestParam("id") id: string, req: express.Request<{}, {}, Plan>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
-
+  public async copy(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, Plan>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       const oldPlan = await this.repositories.plan.load(au.churchId, id);
       const times: Time[] = await this.repositories.time.loadByPlanId(au.churchId, id);
       const positions: Position[] = await this.repositories.position.loadByPlanId(au.churchId, id);
@@ -77,7 +93,7 @@ export class PlanController extends DoingBaseController {
       p.serviceDate = new Date(req.body.serviceDate);
       const plan = await this.repositories.plan.save(p);
 
-      const promises: Promise<any>[] = [];
+      const promises: Promise<unknown>[] = [];
       times.forEach(time => {
         time.id = null;
         time.planId = plan.id;
@@ -92,7 +108,7 @@ export class PlanController extends DoingBaseController {
       });
 
       const idMap = new Map<string, string>(); // oldId -> newId
-      const piPromises: Promise<any>[] = [];
+      const piPromises: Promise<unknown>[] = [];
 
       for (const pi of planItems) {
         const oldId = pi.id;
@@ -106,8 +122,8 @@ export class PlanController extends DoingBaseController {
         );
       }
 
-      const newPlanItems = await Promise.all(piPromises);
-      const updatePromises: Promise<any>[] = [];
+      const newPlanItems = (await Promise.all(piPromises)) as PlanItem[];
+      const updatePromises: Promise<unknown>[] = [];
       for (const pi of newPlanItems) {
         if (pi.parentId && idMap.has(pi.parentId)) {
           const newParentId = idMap.get(pi.parentId);
@@ -124,8 +140,11 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Plan[]>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async save(
+    req: express.Request<{}, {}, Plan[]>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       const promises: Promise<Plan>[] = [];
       req.body.forEach(plan => {
         plan.churchId = au.churchId;
@@ -140,8 +159,12 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpDelete("/:id")
-  public async delete(@requestParam("id") id: string, req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async (au) => {
+  public async delete(
+    @requestParam("id") id: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<interfaces.IHttpActionResult> {
+    return this.actionWrapper(req, res, async au => {
       await this.repositories.time.deleteByPlanId(au.churchId, id);
       await this.repositories.assignment.deleteByPlanId(au.churchId, id);
       await this.repositories.position.deleteByPlanId(au.churchId, id);
@@ -150,5 +173,4 @@ export class PlanController extends DoingBaseController {
       return this.json({});
     });
   }
-
 }

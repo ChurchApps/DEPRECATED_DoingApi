@@ -1,12 +1,11 @@
 import { injectable } from "inversify";
-import { DBHelper } from "../helpers/DBHelper"
+import { DBHelper } from "../helpers/DBHelper";
 import { Condition } from "../models";
 
 @injectable()
 export class MembershipRepository {
-
   private getDBField(condition: Condition) {
-    const fieldData = (condition.fieldData) ? JSON.parse(condition.fieldData) : {}
+    const fieldData = condition.fieldData ? JSON.parse(condition.fieldData) : {};
     let result = condition.field;
     switch (fieldData.datePart) {
       case "dayOfWeek":
@@ -48,11 +47,11 @@ export class MembershipRepository {
     let sql = "select id from people where churchId = ? AND removed = 0 AND ";
     const params = [condition.churchId];
     sql += this.getDBField(condition) + " " + condition.operator + " ?";
-    params.push(this.getDBValue(condition))
+    params.push(this.getDBValue(condition));
 
-    const result: string[] = []
-    const rows = await DBHelper.query("membership", sql, params);
-    rows.forEach((r: any) => result.push(r.id));
+    const result: string[] = [];
+    const rows = (await DBHelper.query("membership", sql, params)) as { id: string }[];
+    rows.forEach((r: { id: string }) => result.push(r.id));
     return result;
   }
 
@@ -61,6 +60,4 @@ export class MembershipRepository {
     const params = [churchId, personIds];
     return DBHelper.query("membership", sql, params);
   }
-
-
 }
