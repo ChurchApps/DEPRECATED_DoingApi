@@ -45,8 +45,8 @@ export const init = async () => {
           } else {
             req.body = bodyString;
           }
-        } catch (e) {
-          console.error("Failed to parse Buffer body:", e.message);
+        } catch (_e) {
+          // Failed to parse Buffer body - set empty object
           req.body = {};
         }
       }
@@ -59,8 +59,8 @@ export const init = async () => {
           } else {
             req.body = bodyString;
           }
-        } catch (e) {
-          console.error("Failed to parse Buffer-like body:", e.message);
+        } catch (_e) {
+          // Failed to parse Buffer-like body - set empty object
           req.body = {};
         }
       }
@@ -70,8 +70,8 @@ export const init = async () => {
           if (contentType.includes("application/json")) {
             req.body = JSON.parse(req.body);
           }
-        } catch (e) {
-          console.error("Failed to parse string body as JSON:", e.message);
+        } catch (_e) {
+          // Failed to parse string body as JSON - leave as string
         }
       }
 

@@ -11,13 +11,13 @@ Environment.init(process.env.APP_ENV)
     init()
       .then(app => {
         app.listen(port, () => {
-          console.error(`Server running at http://localhost:${port}/`);
+          // Server started successfully
         });
       })
       .catch(error => {
-        console.error("Failed to initialize app:", error);
+        throw new Error(`Failed to initialize app: ${error.message}`);
       });
   })
   .catch(error => {
-    console.error("Failed to initialize environment:", error);
+    throw new Error(`Failed to initialize environment: ${error.message}`);
   });

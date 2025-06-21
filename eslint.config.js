@@ -18,7 +18,7 @@ module.exports = tseslint.config(
       prettier: require('eslint-plugin-prettier')
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -34,7 +34,7 @@ module.exports = tseslint.config(
       '@typescript-eslint/require-await': 'warn',
       '@typescript-eslint/no-base-to-string': 'off',
       'prefer-const': 'error',
-      'no-console': ['warn', { allow: ['error'] }],
+      'no-console': 'error',
       'prettier/prettier': 'error'
     },
   },
