@@ -11,7 +11,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.assignment.loadByByPersonId(au.churchId, au.personId);
     });
   }
@@ -22,7 +22,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.assignment.load(au.churchId, id);
     });
   }
@@ -32,7 +32,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const planIdsString = req.query.planIds as string;
       const planIds = planIdsString.split(",");
       return await this.repositories.assignment.loadByPlanIds(au.churchId, planIds);
@@ -45,7 +45,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.assignment.loadByPlanId(au.churchId, planId);
     });
   }
@@ -56,7 +56,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, []>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const assignment = await this.repositories.assignment.load(au.churchId, id);
       if (assignment.personId !== au.personId) throw new Error("Invalid Assignment");
       else {
@@ -72,7 +72,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, []>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const assignment = await this.repositories.assignment.load(au.churchId, id);
       if (assignment.personId !== au.personId) throw new Error("Invalid Assignment");
       else {
@@ -87,9 +87,9 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, Assignment[]>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Assignment>[] = [];
-      req.body.forEach(assignment => {
+      req.body.forEach((assignment) => {
         assignment.churchId = au.churchId;
         if (!assignment.status) assignment.status = "Unconfirmed";
         promises.push(this.repositories.assignment.save(assignment));
@@ -105,7 +105,7 @@ export class AssignmentController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       await this.repositories.assignment.delete(au.churchId, id);
       return this.json({});
     });

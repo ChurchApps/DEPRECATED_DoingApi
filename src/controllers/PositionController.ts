@@ -10,7 +10,7 @@ export class PositionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const idsString = req.query.ids as string;
       const ids = idsString.split(",");
       return await this.repositories.position.loadByIds(au.churchId, ids);
@@ -23,7 +23,7 @@ export class PositionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.position.load(au.churchId, id);
     });
   }
@@ -33,7 +33,7 @@ export class PositionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const planIdsString = req.query.planIds as string;
       const planIds = planIdsString.split(",");
       return await this.repositories.position.loadByPlanIds(au.churchId, planIds);
@@ -46,7 +46,7 @@ export class PositionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.position.loadByPlanId(au.churchId, planId);
     });
   }
@@ -56,9 +56,9 @@ export class PositionController extends DoingBaseController {
     req: express.Request<{}, {}, Position[]>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Position>[] = [];
-      req.body.forEach(position => {
+      req.body.forEach((position) => {
         position.churchId = au.churchId;
         promises.push(this.repositories.position.save(position));
       });
@@ -73,7 +73,7 @@ export class PositionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       await this.repositories.position.delete(au.churchId, id);
       return this.json({});
     });

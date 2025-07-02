@@ -11,7 +11,7 @@ export class ActionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.action.load(au.churchId, id);
     });
   }
@@ -22,7 +22,7 @@ export class ActionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.action.loadForAutomation(au.churchId, automationId);
     });
   }
@@ -32,9 +32,9 @@ export class ActionController extends DoingBaseController {
     req: express.Request<{}, {}, Action[]>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Action>[] = [];
-      req.body.forEach(action => {
+      req.body.forEach((action) => {
         action.churchId = au.churchId;
         promises.push(this.repositories.action.save(action));
       });
@@ -49,7 +49,7 @@ export class ActionController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       await this.repositories.action.delete(au.churchId, id);
       return this.json({});
     });

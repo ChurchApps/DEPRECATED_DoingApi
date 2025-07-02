@@ -10,7 +10,7 @@ export class PlanItemController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const idsString = typeof req.query.ids === "string" ? req.query.ids : req.query.ids ? String(req.query.ids) : "";
       if (!idsString) return this.json({ error: "Missing required parameter: ids" });
       const ids = idsString.split(",");
@@ -24,7 +24,7 @@ export class PlanItemController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.planItem.load(au.churchId, id);
     });
   }
@@ -48,7 +48,7 @@ export class PlanItemController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const result = await this.repositories.planItem.loadForPlan(au.churchId, planId);
       return this.buildTree(result, null);
     });
@@ -59,7 +59,7 @@ export class PlanItemController extends DoingBaseController {
     req: express.Request<{}, {}, PlanItem>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       await this.repositories.planItem.save(req.body);
 
       const items = await this.repositories.planItem.loadForPlan(au.churchId, req.body.planId);
@@ -78,9 +78,9 @@ export class PlanItemController extends DoingBaseController {
     req: express.Request<{}, {}, PlanItem[]>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<PlanItem>[] = [];
-      req.body.forEach(planItem => {
+      req.body.forEach((planItem) => {
         planItem.churchId = au.churchId;
         promises.push(this.repositories.planItem.save(planItem));
       });
@@ -95,7 +95,7 @@ export class PlanItemController extends DoingBaseController {
     req: express.Request<{}, {}, null>,
     res: express.Response
   ): Promise<interfaces.IHttpActionResult> {
-    return this.actionWrapper(req, res, async au => {
+    return this.actionWrapper(req, res, async (au) => {
       await this.repositories.planItem.delete(au.churchId, id);
       return this.json({});
     });
@@ -103,7 +103,7 @@ export class PlanItemController extends DoingBaseController {
 
   private buildTree(planItems: PlanItem[], parentId: string): PlanItem[] {
     const result: PlanItem[] = [];
-    planItems.forEach(pi => {
+    planItems.forEach((pi) => {
       if (pi.parentId === parentId) {
         pi.children = this.buildTree(planItems, pi.id);
         result.push(pi);

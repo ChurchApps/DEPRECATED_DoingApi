@@ -4,7 +4,7 @@ import { Condition } from "../models";
 export class ConditionHelper {
   public static async getPeopleIdsMatchingConditions(conditions: Condition[]) {
     const promises: Promise<Condition>[] = [];
-    conditions.forEach(c => promises.push(ConditionHelper.getPeopleIdsMatchingCondition(c)));
+    conditions.forEach((c) => promises.push(ConditionHelper.getPeopleIdsMatchingCondition(c)));
     const result = await Promise.all(promises);
     return result;
   }

@@ -17,7 +17,7 @@ export class ConjunctionHelper {
   }
 
   public static buildTree(allConjunctions: Conjunction[], allConditions: Condition[]) {
-    allConjunctions.forEach(ac => {
+    allConjunctions.forEach((ac) => {
       if (ac.parentId === null) ac.parentId = "";
     });
     const root: Conjunction = ArrayHelper.getOne(allConjunctions, "parentId", "");
@@ -28,7 +28,7 @@ export class ConjunctionHelper {
   private static buildTreeLevel(allConjunctions: Conjunction[], allConditions: Condition[], parent: Conjunction) {
     parent.conjunctions = ArrayHelper.getAll(allConjunctions, "parentId", parent.id);
     parent.conditions = ArrayHelper.getAll(allConditions, "conjunctionId", parent.id);
-    parent.conjunctions.forEach(c => {
+    parent.conjunctions.forEach((c) => {
       this.buildTreeLevel(allConjunctions, allConditions, c);
     });
   }
@@ -36,23 +36,23 @@ export class ConjunctionHelper {
   public static getPeopleFromTree(parent: Conjunction) {
     const peopleArrays: string[][] = [];
     let result: string[] = [];
-    parent.conditions.forEach(c => {
+    parent.conditions.forEach((c) => {
       peopleArrays.push(c.matchingIds);
     });
-    parent.conjunctions.forEach(c => {
+    parent.conjunctions.forEach((c) => {
       peopleArrays.push(this.getPeopleFromTree(c));
     });
 
     if (parent.groupType === "OR") {
-      peopleArrays.forEach(pa => {
+      peopleArrays.forEach((pa) => {
         if (pa.length === 1 && pa[0] === "*") result = ["*"];
       });
       if (result.length === 0)
-        peopleArrays.forEach(pa => {
+        peopleArrays.forEach((pa) => {
           result = result.concat(pa);
         });
     } else {
-      peopleArrays.forEach(pa => {
+      peopleArrays.forEach((pa) => {
         let allPeople = true;
         let noPeople = false;
         if (pa.length !== 1 || pa[0] !== "*") {
