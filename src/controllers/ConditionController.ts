@@ -1,4 +1,4 @@
-import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
+import { controller, httpPost, httpGet, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController";
 import { Condition } from "../models";
@@ -10,7 +10,7 @@ export class ConditionController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.condition.load(au.churchId, id);
     });
@@ -21,17 +21,14 @@ export class ConditionController extends DoingBaseController {
     @requestParam("id") automationId: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.condition.loadForAutomation(au.churchId, automationId);
     });
   }
 
   @httpPost("/")
-  public async save(
-    req: express.Request<{}, {}, Condition[]>,
-    res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  public async save(req: express.Request<{}, {}, Condition[]>, res: express.Response): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Condition>[] = [];
       req.body.forEach((condition) => {
@@ -48,10 +45,10 @@ export class ConditionController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.condition.delete(au.churchId, id);
-      return this.json({});
+      return {};
     });
   }
 }

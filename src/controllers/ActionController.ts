@@ -1,4 +1,4 @@
-import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
+import { controller, httpPost, httpGet, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController";
 import { Action } from "../models";
@@ -10,7 +10,7 @@ export class ActionController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.action.load(au.churchId, id);
     });
@@ -21,17 +21,14 @@ export class ActionController extends DoingBaseController {
     @requestParam("id") automationId: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.action.loadForAutomation(au.churchId, automationId);
     });
   }
 
   @httpPost("/")
-  public async save(
-    req: express.Request<{}, {}, Action[]>,
-    res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  public async save(req: express.Request<{}, {}, Action[]>, res: express.Response): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Action>[] = [];
       req.body.forEach((action) => {
@@ -48,10 +45,10 @@ export class ActionController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.action.delete(au.churchId, id);
-      return this.json({});
+      return {};
     });
   }
 }

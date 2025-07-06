@@ -1,4 +1,4 @@
-import { controller, httpPost, httpGet, interfaces, requestParam, httpDelete } from "inversify-express-utils";
+import { controller, httpPost, httpGet, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
 import { DoingBaseController } from "./DoingBaseController";
 import { BlockoutDate } from "../models";
@@ -6,10 +6,7 @@ import { BlockoutDate } from "../models";
 @controller("/blockoutDates")
 export class BlockoutDateController extends DoingBaseController {
   @httpGet("/ids")
-  public async getByIds(
-    req: express.Request<{}, {}, null>,
-    res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       const idsString = req.query.ids as string;
       const ids = idsString.split(",");
@@ -18,17 +15,14 @@ export class BlockoutDateController extends DoingBaseController {
   }
 
   @httpGet("/my")
-  public async getMy(req: express.Request<{}, {}, null>, res: express.Response): Promise<interfaces.IHttpActionResult> {
+  public async getMy(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.blockoutDate.loadForPerson(au.churchId, au.personId);
     });
   }
 
   @httpGet("/upcoming")
-  public async getAll(
-    req: express.Request<{}, {}, null>,
-    res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  public async getAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.blockoutDate.loadUpcoming(au.churchId);
     });
@@ -39,17 +33,14 @@ export class BlockoutDateController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.blockoutDate.load(au.churchId, id);
     });
   }
 
   @httpPost("/")
-  public async save(
-    req: express.Request<{}, {}, BlockoutDate[]>,
-    res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  public async save(req: express.Request<{}, {}, BlockoutDate[]>, res: express.Response): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<BlockoutDate>[] = [];
       req.body.forEach((blockoutDate) => {
@@ -67,10 +58,10 @@ export class BlockoutDateController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<interfaces.IHttpActionResult> {
+  ): Promise<unknown> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.blockoutDate.delete(au.churchId, id);
-      return this.json({});
+      return {};
     });
   }
 }

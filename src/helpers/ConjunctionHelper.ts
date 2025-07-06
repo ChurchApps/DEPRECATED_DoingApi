@@ -9,9 +9,12 @@ export class ConjunctionHelper {
       automation.churchId,
       automation.id
     );
-    let conditions = await Repositories.getCurrent().condition.loadForAutomation(automation.churchId, automation.id);
+    let conditions = (await Repositories.getCurrent().condition.loadForAutomation(
+      automation.churchId,
+      automation.id
+    )) as Condition[];
     conditions = await ConditionHelper.getPeopleIdsMatchingConditions(conditions);
-    const tree = this.buildTree(conjunctions, conditions);
+    const tree = this.buildTree(conjunctions as Conjunction[], conditions);
     const peopleIds = this.getPeopleFromTree(tree);
     return peopleIds;
   }

@@ -4,7 +4,7 @@ import { ConjunctionHelper } from "./ConjunctionHelper";
 
 export class AutomationHelper {
   public static async checkAll() {
-    const automations: Automation[] = await Repositories.getCurrent().automation.loadAllChurches();
+    const automations: Automation[] = (await Repositories.getCurrent().automation.loadAllChurches()) as Automation[];
     if (automations.length > 0) {
       for (const a of automations) {
         try {
@@ -35,10 +35,10 @@ export class AutomationHelper {
     }
 
     if (triggeredPeopleIds.length > 0) {
-      const actions: Action[] = await Repositories.getCurrent().action.loadForAutomation(
+      const actions: Action[] = (await Repositories.getCurrent().action.loadForAutomation(
         automation.churchId,
         automation.id
-      );
+      )) as Action[];
       const people: { id: string; displayName: string }[] = (await Repositories.getCurrent().membership.loadPeople(
         automation.churchId,
         triggeredPeopleIds

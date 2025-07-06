@@ -104,31 +104,31 @@ export class TaskRepository {
     associatedWithType: string,
     associatedWithIds: string[]
   ) {
-    let result = [];
+    let result: any[] = [];
     switch (recurs) {
       case "yearly":
-        result = await this.loadByAutomationIdContentYearly(
+        result = (await this.loadByAutomationIdContentYearly(
           churchId,
           automationId,
           associatedWithType,
           associatedWithIds
-        );
+        )) as any[];
         break;
       case "monthly":
-        result = await this.loadByAutomationIdContentMonthly(
+        result = (await this.loadByAutomationIdContentMonthly(
           churchId,
           automationId,
           associatedWithType,
           associatedWithIds
-        );
+        )) as any[];
         break;
       default:
-        result = await this.loadByAutomationIdContentNoRepeat(
+        result = (await this.loadByAutomationIdContentNoRepeat(
           churchId,
           automationId,
           associatedWithType,
           associatedWithIds
-        );
+        )) as any[];
         break;
     }
     return result;
@@ -182,7 +182,7 @@ export class TaskRepository {
       "select max(ifnull(taskNumber, 0)) + 1 as taskNumber from tasks where churchId=?",
       [churchId]
     );
-    return result.taskNumber;
+    return (result as any).taskNumber;
   }
 
   public loadForPerson(churchId: string, personId: string, status: string) {
