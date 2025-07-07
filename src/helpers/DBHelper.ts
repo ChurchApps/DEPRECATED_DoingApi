@@ -16,7 +16,7 @@ export class DBHelper {
       const [rows] = await connection.query(sql, params);
       return rows;
     } catch (ex) {
-      LoggingHelper.getCurrent().error(ex);
+      LoggingHelper.getCurrent().error(ex as any);
       throw ex;
     }
   }
@@ -27,7 +27,7 @@ export class DBHelper {
     try {
       result = await this.getQuery(connection, sql, params);
     } catch (ex) {
-      LoggingHelper.getCurrent().error(ex);
+      LoggingHelper.getCurrent().error(ex as any);
     } finally {
       connection.release();
     }

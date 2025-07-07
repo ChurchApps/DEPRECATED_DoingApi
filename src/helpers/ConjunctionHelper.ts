@@ -6,12 +6,12 @@ import { ConditionHelper } from "./ConditionHelper";
 export class ConjunctionHelper {
   public static async getPeopleIds(automation: Automation) {
     const conjunctions = await Repositories.getCurrent().conjunction.loadForAutomation(
-      automation.churchId,
-      automation.id
+      automation.churchId || "",
+      automation.id || ""
     );
     let conditions = (await Repositories.getCurrent().condition.loadForAutomation(
-      automation.churchId,
-      automation.id
+      automation.churchId || "",
+      automation.id || ""
     )) as Condition[];
     conditions = await ConditionHelper.getPeopleIdsMatchingConditions(conditions);
     const tree = this.buildTree(conjunctions as Conjunction[], conditions);
@@ -40,7 +40,7 @@ export class ConjunctionHelper {
     const peopleArrays: string[][] = [];
     let result: string[] = [];
     parent.conditions.forEach((c) => {
-      peopleArrays.push(c.matchingIds);
+      peopleArrays.push(c.matchingIds || []);
     });
     parent.conjunctions.forEach((c) => {
       peopleArrays.push(this.getPeopleFromTree(c));

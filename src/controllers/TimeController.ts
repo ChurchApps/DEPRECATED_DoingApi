@@ -6,7 +6,7 @@ import { Time } from "../models";
 @controller("/times")
 export class TimeController extends DoingBaseController {
   @httpGet("/plans")
-  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const idsString = req.query.planIds as string;
       const planIds = idsString.split(",");
@@ -15,7 +15,7 @@ export class TimeController extends DoingBaseController {
   }
 
   @httpGet("/all")
-  public async getAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.time.loadAll(au.churchId);
     });
@@ -26,7 +26,7 @@ export class TimeController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.time.load(au.churchId, id);
     });
@@ -37,14 +37,14 @@ export class TimeController extends DoingBaseController {
     @requestParam("planId") planId: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.time.loadByPlanId(au.churchId, planId);
     });
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Time[]>, res: express.Response): Promise<unknown> {
+  public async save(req: express.Request<{}, {}, Time[]>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Time>[] = [];
       req.body.forEach((time) => {
@@ -61,7 +61,7 @@ export class TimeController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.time.delete(au.churchId, id);
       return {};

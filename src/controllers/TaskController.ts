@@ -8,7 +8,7 @@ import { Environment } from "../helpers";
 @controller("/tasks")
 export class TaskController extends DoingBaseController {
   @httpGet("/timeline")
-  public async getTimeline(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getTimeline(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const taskIds =
         typeof req.query.taskIds === "string"
@@ -21,7 +21,7 @@ export class TaskController extends DoingBaseController {
   }
 
   @httpGet("/closed")
-  public async getForPersonClosed(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getForPersonClosed(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.task.loadForPerson(au.churchId, au.personId, "Closed");
     });
@@ -32,7 +32,7 @@ export class TaskController extends DoingBaseController {
     @requestParam("personId") personId: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.task.loadForDirectoryUpdate(au.churchId, personId);
     });
@@ -43,14 +43,14 @@ export class TaskController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.task.load(au.churchId, id);
     });
   }
 
   @httpGet("/")
-  public async getForPerson(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getForPerson(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.task.loadForPerson(au.churchId, au.personId, "Open");
     });
@@ -60,14 +60,14 @@ export class TaskController extends DoingBaseController {
   public async loadForGroups(
     req: express.Request<{}, {}, { groupIds: string[]; status: string }>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.task.loadForGroups(au.churchId, req.body.groupIds, req.body.status);
     });
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Task[]>, res: express.Response): Promise<unknown> {
+  public async save(req: express.Request<{}, {}, Task[]>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const result: Task[] = [];
       for (const task of req.body) {

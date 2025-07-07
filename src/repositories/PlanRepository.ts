@@ -19,7 +19,7 @@ export class PlanRepository {
       plan.churchId,
       plan.ministryId,
       plan.name,
-      plan.serviceDate.toISOString().split("T")[0],
+      plan.serviceDate?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
       plan.notes,
       plan.serviceOrder
     ];
@@ -33,7 +33,7 @@ export class PlanRepository {
     const params = [
       plan.ministryId,
       plan.name,
-      plan.serviceDate.toISOString().split("T")[0],
+      plan.serviceDate?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
       plan.notes,
       plan.serviceOrder,
       plan.id,

@@ -11,7 +11,7 @@ export class AutomationController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapperAnon(req, res, async () => {
       await AutomationHelper.checkAll();
       return { success: true };
@@ -23,21 +23,21 @@ export class AutomationController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.automation.load(au.churchId, id);
     });
   }
 
   @httpGet("/")
-  public async getForAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getForAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.automation.loadAll(au.churchId);
     });
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Automation[]>, res: express.Response): Promise<unknown> {
+  public async save(req: express.Request<{}, {}, Automation[]>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Automation>[] = [];
       req.body.forEach((automation) => {
@@ -54,7 +54,7 @@ export class AutomationController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.automation.delete(au.churchId, id);
       return {};

@@ -7,14 +7,14 @@ import { PlanHelper } from "../helpers/PlanHelper";
 @controller("/plans")
 export class PlanController extends DoingBaseController {
   @httpGet("/presenter")
-  public async getForPresenter(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getForPresenter(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.plan.load7Days(au.churchId);
     });
   }
 
   @httpGet("/ids")
-  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getByIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const idsString = typeof req.query.ids === "string" ? req.query.ids : req.query.ids ? String(req.query.ids) : "";
       if (!idsString) return this.json({ error: "Missing required parameter: ids" });
@@ -28,14 +28,14 @@ export class PlanController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.plan.load(au.churchId, id);
     });
   }
 
   @httpGet("/")
-  public async getForAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getForAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.plan.loadAll(au.churchId);
     });
@@ -53,7 +53,7 @@ export class PlanController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, { teams: { positionId: string; personIds: string[] }[] }>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const plan = await this.repositories.plan.load(au.churchId, id);
       const positions: Position[] = (await this.repositories.position.loadByPlanId(au.churchId, id)) as Position[];
@@ -72,7 +72,7 @@ export class PlanController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, Plan>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const oldPlan = (await this.repositories.plan.load(au.churchId, id)) as Plan;
       const times: Time[] = (await this.repositories.time.loadByPlanId(au.churchId, id)) as Time[];
@@ -81,40 +81,48 @@ export class PlanController extends DoingBaseController {
 
       const p = { ...req.body } as Plan;
       p.churchId = au.churchId;
-      p.serviceDate = new Date(req.body.serviceDate);
+      p.serviceDate = new Date(req.body.serviceDate || new Date());
       const plan = await this.repositories.plan.save(p);
 
-      const promises: Promise<unknown>[] = [];
+      const promises: Promise<any>[] = [];
       times.forEach((time) => {
-        time.id = null;
+        time.id = null as any;
         time.planId = plan.id;
-        time.startTime = this.adjustTime(time.startTime, plan.serviceDate, oldPlan.serviceDate);
-        time.endTime = this.adjustTime(time.endTime, plan.serviceDate, oldPlan.serviceDate);
+        time.startTime = this.adjustTime(
+          time.startTime || new Date(),
+          plan.serviceDate || new Date(),
+          oldPlan.serviceDate || new Date()
+        );
+        time.endTime = this.adjustTime(
+          time.endTime || new Date(),
+          plan.serviceDate || new Date(),
+          oldPlan.serviceDate || new Date()
+        );
         promises.push(this.repositories.time.save(time));
       });
       positions.forEach((position) => {
-        position.id = null;
+        position.id = null as any;
         position.planId = plan.id;
         promises.push(this.repositories.position.save(position));
       });
 
       const idMap = new Map<string, string>(); // oldId -> newId
-      const piPromises: Promise<unknown>[] = [];
+      const piPromises: Promise<any>[] = [];
 
       for (const pi of planItems) {
         const oldId = pi.id;
-        pi.id = null;
+        pi.id = null as any;
         pi.planId = plan.id;
         piPromises.push(
           this.repositories.planItem.save(pi).then((saved) => {
-            if (oldId) idMap.set(oldId, saved.id);
+            if (oldId) idMap.set(oldId, saved.id || "");
             return saved;
           })
         );
       }
 
       const newPlanItems = (await Promise.all(piPromises)) as PlanItem[];
-      const updatePromises: Promise<unknown>[] = [];
+      const updatePromises: Promise<any>[] = [];
       for (const pi of newPlanItems) {
         if (pi.parentId && idMap.has(pi.parentId)) {
           const newParentId = idMap.get(pi.parentId);
@@ -131,7 +139,7 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Plan[]>, res: express.Response): Promise<unknown> {
+  public async save(req: express.Request<{}, {}, Plan[]>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Plan>[] = [];
       req.body.forEach((plan) => {
@@ -151,7 +159,7 @@ export class PlanController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.time.deleteByPlanId(au.churchId, id);
       await this.repositories.assignment.deleteByPlanId(au.churchId, id);

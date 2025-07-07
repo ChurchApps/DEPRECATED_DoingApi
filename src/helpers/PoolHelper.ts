@@ -17,7 +17,7 @@ export class PoolHelper {
   }
 
   public static initPool(databaseName: string) {
-    const connectionString = process.env["CONNECTION_STRING_" + databaseName.toUpperCase()];
+    const connectionString = process.env["CONNECTION_STRING_" + databaseName.toUpperCase()] || "";
     const config = this.getConfig(connectionString);
 
     const pool = mysql.createPool({
@@ -31,14 +31,14 @@ export class PoolHelper {
       waitForConnections: true,
       queueLimit: 50,
       typeCast: function castField(
-        field: { type: string; length: number; buffer: () => Buffer },
+        field: { type: string; length: number; buffer: () => Buffer | null },
         useDefaultTypeCasting: () => unknown
       ) {
         // convert bit(1) to bool
         if (field.type === "BIT" && field.length === 1) {
           try {
             const bytes = field.buffer();
-            return bytes[0] === 1;
+            return bytes && bytes[0] === 1;
           } catch {
             return false;
           }

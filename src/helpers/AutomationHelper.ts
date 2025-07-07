@@ -22,25 +22,25 @@ export class AutomationHelper {
 
     if (triggeredPeopleIds.length > 0) {
       const existingTasks: Task[] = await Repositories.getCurrent().task.loadByAutomationIdContent(
-        automation.churchId,
-        automation.id,
-        automation.recurs,
+        automation.churchId || "",
+        automation.id || "",
+        automation.recurs || "",
         "person",
         triggeredPeopleIds
       );
       for (const t of existingTasks) {
-        const idx = triggeredPeopleIds.indexOf(t.associatedWithId);
+        const idx = triggeredPeopleIds.indexOf(t.associatedWithId || "");
         if (idx > -1) triggeredPeopleIds.splice(idx, 1);
       }
     }
 
     if (triggeredPeopleIds.length > 0) {
       const actions: Action[] = (await Repositories.getCurrent().action.loadForAutomation(
-        automation.churchId,
-        automation.id
+        automation.churchId || "",
+        automation.id || ""
       )) as Action[];
       const people: { id: string; displayName: string }[] = (await Repositories.getCurrent().membership.loadPeople(
-        automation.churchId,
+        automation.churchId || "",
         triggeredPeopleIds
       )) as { id: string; displayName: string }[];
       for (const action of actions) {

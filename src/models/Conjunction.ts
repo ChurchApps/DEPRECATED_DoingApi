@@ -7,7 +7,7 @@ export class Conjunction {
   public parentId?: string;
   public groupType?: string;
 
-  public conjunctions: Conjunction[];
-  public conditions: Condition[];
+  public conjunctions: Conjunction[] = [];
+  public conditions: Condition[] = [];
   public matchingIds?: string[];
 }

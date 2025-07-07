@@ -31,21 +31,25 @@ export class ConditionHelper {
         switch (fieldData.datePart) {
           case "dayOfMonth": {
             const dom = new Date().getDate();
-            result = ConditionHelper.evalNum(dom, condition.operator, parseInt(condition.value, 0));
+            result = ConditionHelper.evalNum(dom, condition.operator || "", parseInt(condition.value || "0", 0));
             break;
           }
           case "dayOfWeek": {
             const dow = new Date().getDay() + 1;
-            result = ConditionHelper.evalNum(dow, condition.operator, parseInt(condition.value, 0));
+            result = ConditionHelper.evalNum(dow, condition.operator || "", parseInt(condition.value || "0", 0));
             break;
           }
           case "month": {
             const month = new Date().getMonth() + 1;
-            result = ConditionHelper.evalNum(month, condition.operator, parseInt(condition.value, 0));
+            result = ConditionHelper.evalNum(month, condition.operator || "", parseInt(condition.value || "0", 0));
             break;
           }
           default:
-            result = ConditionHelper.evalDate(new Date(), condition.operator, new Date(condition.value));
+            result = ConditionHelper.evalDate(
+              new Date(),
+              condition.operator || "",
+              new Date(condition.value || new Date())
+            );
             break;
         }
         break;

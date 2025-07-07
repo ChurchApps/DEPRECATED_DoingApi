@@ -32,7 +32,7 @@ export class TaskRepository {
 
   private async create(task: Task) {
     task.id = UniqueIdHelper.shortId();
-    const taskNumber = await this.loadNextTaskNumber(task.churchId); // NOTE - This is problematic if saving multiple records asyncronously.  Be sure to await each call
+    const taskNumber = await this.loadNextTaskNumber(task.churchId || ""); // NOTE - This is problematic if saving multiple records asyncronously.  Be sure to await each call
 
     const sql =
       "INSERT INTO tasks (id, churchId, taskNumber, taskType, dateCreated, dateClosed, associatedWithType, associatedWithId, associatedWithLabel, createdByType, createdById, createdByLabel, assignedToType, assignedToId, assignedToLabel, title, status, automationId, conversationId, data) VALUES (?, ?, ?, ?, now(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";

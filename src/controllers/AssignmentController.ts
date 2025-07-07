@@ -10,7 +10,7 @@ export class AssignmentController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.assignment.loadByByPersonId(au.churchId, au.personId);
     });
@@ -21,14 +21,14 @@ export class AssignmentController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.assignment.load(au.churchId, id);
     });
   }
 
   @httpGet("/plan/ids")
-  public async getByPlanIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<unknown> {
+  public async getByPlanIds(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const planIdsString = req.query.planIds as string;
       const planIds = planIdsString.split(",");
@@ -41,7 +41,7 @@ export class AssignmentController extends DoingBaseController {
     @requestParam("planId") planId: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.assignment.loadByPlanId(au.churchId, planId);
     });
@@ -52,7 +52,7 @@ export class AssignmentController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, []>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const assignment = (await this.repositories.assignment.load(au.churchId, id)) as Assignment;
       if (assignment.personId !== au.personId) throw new Error("Invalid Assignment");
@@ -68,7 +68,7 @@ export class AssignmentController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, []>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const assignment = (await this.repositories.assignment.load(au.churchId, id)) as Assignment;
       if (assignment.personId !== au.personId) throw new Error("Invalid Assignment");
@@ -80,7 +80,7 @@ export class AssignmentController extends DoingBaseController {
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Assignment[]>, res: express.Response): Promise<unknown> {
+  public async save(req: express.Request<{}, {}, Assignment[]>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       const promises: Promise<Assignment>[] = [];
       req.body.forEach((assignment) => {
@@ -98,7 +98,7 @@ export class AssignmentController extends DoingBaseController {
     @requestParam("id") id: string,
     req: express.Request<{}, {}, null>,
     res: express.Response
-  ): Promise<unknown> {
+  ): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       await this.repositories.assignment.delete(au.churchId, id);
       return {};
