@@ -23,8 +23,6 @@ const checkPool = async () => {
 
 const universal = async (event, context) => {
   try {
-    console.log('Lambda invocation:', event.httpMethod, event.path);
-    
     await checkPool();
     
     // Initialize the handler only once
@@ -47,8 +45,7 @@ const universal = async (event, context) => {
     
     return serverlessExpressInstance(event, context);
   } catch (error) {
-    console.error('Lambda handler error:', error);
-    console.error('Error stack:', error.stack);
+    console.error('Lambda handler error:', error.message);
     return {
       statusCode: 500,
       headers: {
