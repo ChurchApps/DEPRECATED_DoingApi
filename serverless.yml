@@ -20,7 +20,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs20.x
-  memorySize: 1024
+  memorySize: 512 # Reduced from 1024MB for cost optimization
   timeout: 10
   region: ${env:AWS_REGION, 'us-east-2'}
   stage: ${self:custom.stage}
@@ -28,10 +28,13 @@ provider:
     role: arn:aws:iam::${aws:accountId}:role/ChurchAppsRole
   environment:
     APP_ENV: ${self:custom.env}
+  logs:
+    httpApi:
+      logRetentionInDays: 1
   apiGateway:
     throttle:
-      rateLimit: 5     # 5 requests per second per IP
-      burstLimit: 20   # Allow bursts up to 20 requests per second
+      rateLimit: 5 # 5 requests per second per IP
+      burstLimit: 20 # Allow bursts up to 20 requests per second
 
 package:
   individually: true
@@ -76,6 +79,8 @@ functions:
   nightly:
     name: doing-api-${self:custom.stage}-nightly
     handler: lambda.nightly
+    memorySize: 256 # Reduced from 1024MB for lightweight timer
+    timeout: 60 # Add explicit timeout for scheduled task
     layers:
       - { Ref: DependenciesLambdaLayer }
     vpc: ${self:custom.vpcSettings.current}
