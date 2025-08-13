@@ -52,4 +52,8 @@ export class PlanTypeRepository {
   public loadAll(churchId: string) {
     return DB.query("SELECT * FROM planTypes WHERE churchId=?;", [churchId]);
   }
+
+  public loadByMinistryId(churchId: string, ministryId: string) {
+    return DB.query("SELECT * FROM planTypes WHERE churchId=? AND ministryId=?;", [churchId, ministryId]);
+  }
 }

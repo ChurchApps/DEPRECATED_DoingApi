@@ -70,10 +70,10 @@ BEGIN
      DATE_ADD(DATE_ADD(CURDATE(), INTERVAL (5 - DAYOFWEEK(CURDATE())) DAY), INTERVAL 21 HOUR), 'Worship,Technical');
 
     -- Create Worship Plans
-    INSERT INTO plans (id, churchId, ministryId, planTypeId, name, serviceDate, notes, serviceOrder) VALUES
+    INSERT INTO plans (id, churchId, ministryId, planTypeId, name, serviceDate, notes, serviceOrder, contentType, contentId) VALUES
     ('PLA00000001', 'CHU00000001', 'GRP0000000a', 'PLT00000001', 'Upcoming Worship Schedule', 
      DATE_ADD(CURDATE(), INTERVAL (7 - DAYOFWEEK(CURDATE())) DAY), 
-     'Upcoming worship services including special seasonal service', 1);
+     'Upcoming worship services including special seasonal service', 1, 'lesson', 'LES12345678');
 
     -- Create Plan Items
     INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES

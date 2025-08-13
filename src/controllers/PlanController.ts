@@ -1,8 +1,8 @@
-import { controller, httpPost, httpGet, requestParam, httpDelete } from "inversify-express-utils";
 import express from "express";
-import { DoingBaseController } from "./DoingBaseController";
-import { Plan, PlanItem, Position, Time } from "../models";
+import { controller, httpDelete, httpGet, httpPost, requestParam } from "inversify-express-utils";
 import { PlanHelper } from "../helpers/PlanHelper";
+import { Plan, PlanItem, Position, Time } from "../models";
+import { DoingBaseController } from "./DoingBaseController";
 
 @controller("/plans")
 export class PlanController extends DoingBaseController {
@@ -38,6 +38,17 @@ export class PlanController extends DoingBaseController {
   public async getForAll(req: express.Request<{}, {}, null>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
       return await this.repositories.plan.loadAll(au.churchId);
+    });
+  }
+
+  @httpGet("/types/:planTypeId")
+  public async getByPlanTypeId(
+    @requestParam("planTypeId") planTypeId: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<any> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.plan.loadByPlanTypeId(au.churchId, planTypeId);
     });
   }
 

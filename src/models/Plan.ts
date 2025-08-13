@@ -7,4 +7,6 @@ export class Plan {
   public serviceDate?: Date;
   public notes?: string;
   public serviceOrder?: boolean;
+  public contentType?: string;
+  public contentId?: string;
 }

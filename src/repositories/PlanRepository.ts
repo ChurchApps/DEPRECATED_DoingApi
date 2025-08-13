@@ -1,6 +1,5 @@
+import { DB, UniqueIdHelper } from "@churchapps/apihelper";
 import { injectable } from "inversify";
-import { UniqueIdHelper } from "@churchapps/apihelper";
-import { DB } from "@churchapps/apihelper";
 import { Plan } from "../models";
 
 @injectable()
@@ -13,7 +12,7 @@ export class PlanRepository {
     plan.id = UniqueIdHelper.shortId();
 
     const sql =
-      "INSERT INTO plans (id, churchId, ministryId, planTypeId, name, serviceDate, notes, serviceOrder) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+      "INSERT INTO plans (id, churchId, ministryId, planTypeId, name, serviceDate, notes, serviceOrder, contentType, contentId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     const params = [
       plan.id,
       plan.churchId,
@@ -22,15 +21,18 @@ export class PlanRepository {
       plan.name,
       plan.serviceDate?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
       plan.notes,
-      plan.serviceOrder
+      plan.serviceOrder,
+      plan.contentType,
+      plan.contentId
     ];
+    console.log(sql, params);
     await DB.query(sql, params);
     return plan;
   }
 
   private async update(plan: Plan) {
     const sql =
-      "UPDATE plans SET ministryId=?, planTypeId=?, name=?, serviceDate=?, notes=?, serviceOrder=? WHERE id=? and churchId=?";
+      "UPDATE plans SET ministryId=?, planTypeId=?, name=?, serviceDate=?, notes=?, serviceOrder=?, contentType=?, contentId=? WHERE id=? and churchId=?";
     const params = [
       plan.ministryId,
       plan.planTypeId,
@@ -38,6 +40,8 @@ export class PlanRepository {
       plan.serviceDate?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
       plan.notes,
       plan.serviceOrder,
+      plan.contentType,
+      plan.contentId,
       plan.id,
       plan.churchId
     ];
@@ -69,6 +73,9 @@ export class PlanRepository {
   }
 
   public loadByPlanTypeId(churchId: string, planTypeId: string) {
-    return DB.query("SELECT * FROM plans WHERE churchId=? AND planTypeId=? order by serviceDate desc;", [churchId, planTypeId]);
+    return DB.query("SELECT * FROM plans WHERE churchId=? AND planTypeId=? order by serviceDate desc;", [
+      churchId,
+      planTypeId
+    ]);
   }
 }

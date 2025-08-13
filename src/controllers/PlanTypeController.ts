@@ -33,6 +33,17 @@ export class PlanTypeController extends DoingBaseController {
     });
   }
 
+  @httpGet("/ministryId/:ministryId")
+  public async getByMinistryId(
+    @requestParam("ministryId") ministryId: string,
+    req: express.Request<{}, {}, null>,
+    res: express.Response
+  ): Promise<any> {
+    return this.actionWrapper(req, res, async (au) => {
+      return await this.repositories.planType.loadByMinistryId(au.churchId, ministryId);
+    });
+  }
+
   @httpPost("/")
   public async save(req: express.Request<{}, {}, PlanType[]>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
