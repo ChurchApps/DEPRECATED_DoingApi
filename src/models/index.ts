@@ -6,6 +6,7 @@ export { Condition } from "./Condition";
 export { Conjunction } from "./Conjunction";
 export { Plan } from "./Plan";
 export { PlanItem } from "./PlanItem";
+export { PlanType } from "./PlanType";
 export { Position } from "./Position";
 export { Task } from "./Task";
 export { Time } from "./Time";

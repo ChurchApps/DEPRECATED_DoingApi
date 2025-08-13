@@ -24,6 +24,9 @@ export const init = async () => {
       })
     );
 
+    // Add standard Express JSON parsing for development
+    expApp.use(express.json());
+
     // Handle preflight requests early
     expApp.options("*", (req, res) => {
       res.header("Access-Control-Allow-Origin", "*");

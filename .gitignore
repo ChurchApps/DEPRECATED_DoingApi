@@ -1,5 +1,7 @@
 *.bat
 /content/
+.serena
+
 
 # Logs
 logs

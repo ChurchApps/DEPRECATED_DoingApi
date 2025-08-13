@@ -15,6 +15,7 @@ BEGIN
     TRUNCATE TABLE notes;
     TRUNCATE TABLE planItems;
     TRUNCATE TABLE plans;
+    TRUNCATE TABLE planTypes;
     TRUNCATE TABLE positions;
     TRUNCATE TABLE times;
     TRUNCATE TABLE tasks;
@@ -35,6 +36,14 @@ BEGIN
     -- Create actions for the birthday automation
     INSERT INTO actions (id, churchId, automationId, actionType, actionData) VALUES
     ('ACT00000001', 'CHU00000001', 'AUT00000001', 'CreateTask', '{"assignedTo": "PER00000069", "title": "Send Birthday Card to {memberName}", "description": "Send birthday card to {memberName} for their birthday on {birthday}. Address: {address}", "dueDate": "{birthday}", "daysBeforeDue": 7, "sortOrder": 1}');
+
+    -- Create Plan Types
+    INSERT INTO planTypes (id, churchId, ministryId, name) VALUES
+    ('PLT00000001', 'CHU00000001', 'GRP0000000a', 'Sunday Service'),
+    ('PLT00000002', 'CHU00000001', 'GRP0000000a', 'Wednesday Night Service'),
+    ('PLT00000003', 'CHU00000001', 'GRP0000000a', 'Special Event'),
+    ('PLT00000004', 'CHU00000001', 'GRP0000000a', 'Youth Service'),
+    ('PLT00000005', 'CHU00000001', 'GRP0000000a', 'Prayer Meeting');
 
     -- Create Worship Ministry Positions
     INSERT INTO positions (id, churchId, planId, categoryName, name, count, groupId) VALUES
@@ -61,8 +70,8 @@ BEGIN
      DATE_ADD(DATE_ADD(CURDATE(), INTERVAL (5 - DAYOFWEEK(CURDATE())) DAY), INTERVAL 21 HOUR), 'Worship,Technical');
 
     -- Create Worship Plans
-    INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes, serviceOrder) VALUES
-    ('PLA00000001', 'CHU00000001', 'GRP0000000a', 'Upcoming Worship Schedule', 
+    INSERT INTO plans (id, churchId, ministryId, planTypeId, name, serviceDate, notes, serviceOrder) VALUES
+    ('PLA00000001', 'CHU00000001', 'GRP0000000a', 'PLT00000001', 'Upcoming Worship Schedule', 
      DATE_ADD(CURDATE(), INTERVAL (7 - DAYOFWEEK(CURDATE())) DAY), 
      'Upcoming worship services including special seasonal service', 1);
 

@@ -13,11 +13,12 @@ export class PlanRepository {
     plan.id = UniqueIdHelper.shortId();
 
     const sql =
-      "INSERT INTO plans (id, churchId, ministryId, name, serviceDate, notes, serviceOrder) VALUES (?, ?, ?, ?, ?, ?, ?);";
+      "INSERT INTO plans (id, churchId, ministryId, planTypeId, name, serviceDate, notes, serviceOrder) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     const params = [
       plan.id,
       plan.churchId,
       plan.ministryId,
+      plan.planTypeId,
       plan.name,
       plan.serviceDate?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
       plan.notes,
@@ -29,9 +30,10 @@ export class PlanRepository {
 
   private async update(plan: Plan) {
     const sql =
-      "UPDATE plans SET ministryId=?, name=?, serviceDate=?, notes=?, serviceOrder=? WHERE id=? and churchId=?";
+      "UPDATE plans SET ministryId=?, planTypeId=?, name=?, serviceDate=?, notes=?, serviceOrder=? WHERE id=? and churchId=?";
     const params = [
       plan.ministryId,
+      plan.planTypeId,
       plan.name,
       plan.serviceDate?.toISOString().split("T")[0] || new Date().toISOString().split("T")[0],
       plan.notes,
@@ -64,5 +66,9 @@ export class PlanRepository {
       "SELECT * FROM plans WHERE churchId=? AND serviceDate BETWEEN CURDATE() AND (CURDATE() + INTERVAL 7 DAY) order by serviceDate desc;",
       [churchId]
     );
+  }
+
+  public loadByPlanTypeId(churchId: string, planTypeId: string) {
+    return DB.query("SELECT * FROM plans WHERE churchId=? AND planTypeId=? order by serviceDate desc;", [churchId, planTypeId]);
   }
 }

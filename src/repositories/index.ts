@@ -6,6 +6,7 @@ export { ConditionRepository } from "./ConditionRepository";
 export { ConjunctionRepository } from "./ConjunctionRepository";
 export { PlanRepository } from "./PlanRepository";
 export { PlanItemRepository } from "./PlanItemRepository";
+export { PlanTypeRepository } from "./PlanTypeRepository";
 export { PositionRepository } from "./PositionRepository";
 export { Repositories } from "./Repositories";
 export { TaskRepository } from "./TaskRepository";
