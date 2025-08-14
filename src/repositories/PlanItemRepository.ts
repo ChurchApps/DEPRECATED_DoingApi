@@ -1,6 +1,5 @@
+import { DB, UniqueIdHelper } from "@churchapps/apihelper";
 import { injectable } from "inversify";
-import { UniqueIdHelper } from "@churchapps/apihelper";
-import { DB } from "@churchapps/apihelper";
 import { PlanItem } from "../models";
 
 @injectable()
@@ -13,7 +12,7 @@ export class PlanItemRepository {
     planItem.id = UniqueIdHelper.shortId();
 
     const sql =
-      "INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+      "INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds, link) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     const params = [
       planItem.id,
       planItem.churchId,
@@ -24,7 +23,8 @@ export class PlanItemRepository {
       planItem.relatedId,
       planItem.label,
       planItem.description,
-      planItem.seconds
+      planItem.seconds,
+      planItem.link
     ];
     await DB.query(sql, params);
     return planItem;
@@ -32,7 +32,7 @@ export class PlanItemRepository {
 
   private async update(planItem: PlanItem) {
     const sql =
-      "UPDATE planItems SET planId=?, parentId=?, sort=?, itemType=?, relatedId=?, label=?, description=?, seconds=? WHERE id=? and churchId=?";
+      "UPDATE planItems SET planId=?, parentId=?, sort=?, itemType=?, relatedId=?, label=?, description=?, seconds=?, link=? WHERE id=? and churchId=?";
     const params = [
       planItem.planId,
       planItem.parentId,
@@ -42,6 +42,7 @@ export class PlanItemRepository {
       planItem.label,
       planItem.description,
       planItem.seconds,
+      planItem.link,
       planItem.id,
       planItem.churchId
     ];

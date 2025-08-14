@@ -9,6 +9,7 @@ export class PlanItem {
   public label?: string;
   public description?: string;
   public seconds?: number;
+  public link?: string;
 
   public children?: PlanItem[];
 }

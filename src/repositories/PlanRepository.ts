@@ -25,7 +25,6 @@ export class PlanRepository {
       plan.contentType,
       plan.contentId
     ];
-    console.log(sql, params);
     await DB.query(sql, params);
     return plan;
   }

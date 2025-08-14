@@ -76,36 +76,36 @@ BEGIN
      'Upcoming worship services including special seasonal service', 1, 'lesson', 'LES12345678');
 
     -- Create Plan Items
-    INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds) VALUES
+    INSERT INTO planItems (id, churchId, planId, parentId, sort, itemType, relatedId, label, description, seconds, link) VALUES
     -- Week 1 (March 3)
-    ('PLI00000001', 'CHU00000001', 'PLA00000001', NULL, 1, 'header', NULL, 'Countdown Video', '', 0),
-    ('PLI00000002', 'CHU00000001', 'PLA00000001', 'PLI00000001', 1, 'item', NULL, 'Countdown Video', '', 600),
-    ('PLI00000003', 'CHU00000001', 'PLA00000001', 'PLI00000001', 2, 'item', NULL, 'Welcome and Opening Prayer', 'John leads', 120),
+    ('PLI00000001', 'CHU00000001', 'PLA00000001', NULL, 1, 'header', NULL, 'Countdown Video', '', 0, NULL),
+    ('PLI00000002', 'CHU00000001', 'PLA00000001', 'PLI00000001', 1, 'item', NULL, 'Countdown Video', '', 600, 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'),
+    ('PLI00000003', 'CHU00000001', 'PLA00000001', 'PLI00000001', 2, 'item', NULL, 'Welcome and Opening Prayer', 'John leads', 120, NULL),
 
     -- Worship Section
-    ('PLI00000004', 'CHU00000001', 'PLA00000001', NULL, 2, 'header', NULL, 'Worship', '', 0),
-    ('PLI00000005', 'CHU00000001', 'PLA00000001', 'PLI00000004', 1, 'arrangementKey', 'ARK00000001', 'What a Beautiful Name', 'Key of B', 360),
-    ('PLI00000006', 'CHU00000001', 'PLA00000001', 'PLI00000004', 2, 'arrangementKey', 'ARK00000003', 'Good Good Father', 'Key of G', 345),
-    ('PLI00000007', 'CHU00000001', 'PLA00000001', 'PLI00000004', 3, 'arrangementKey', 'ARK00000007', 'Build My Life', 'Key of E', 355),
-    ('PLI00000008', 'CHU00000001', 'PLA00000001', 'PLI00000004', 4, 'item', NULL, 'Prayer and Offering', 'Michael leads prayer', 180),
+    ('PLI00000004', 'CHU00000001', 'PLA00000001', NULL, 2, 'header', NULL, 'Worship', '', 0, NULL),
+    ('PLI00000005', 'CHU00000001', 'PLA00000001', 'PLI00000004', 1, 'arrangementKey', 'ARK00000001', 'What a Beautiful Name', 'Key of B', 360, 'https://www.youtube.com/watch?v=nQWFzMvCfLE'),
+    ('PLI00000006', 'CHU00000001', 'PLA00000001', 'PLI00000004', 2, 'arrangementKey', 'ARK00000003', 'Good Good Father', 'Key of G', 345, 'https://www.youtube.com/watch?v=djH8_mpYgp8'),
+    ('PLI00000007', 'CHU00000001', 'PLA00000001', 'PLI00000004', 3, 'arrangementKey', 'ARK00000007', 'Build My Life', 'Key of E', 355, 'https://www.youtube.com/watch?v=HhKaEuB4DQY'),
+    ('PLI00000008', 'CHU00000001', 'PLA00000001', 'PLI00000004', 4, 'item', NULL, 'Prayer and Offering', 'Michael leads prayer', 180, NULL),
 
     -- Scripture and Sermon Section
-    ('PLI00000009', 'CHU00000001', 'PLA00000001', NULL, 3, 'header', NULL, 'Scripture and Sermon', '', 0),
-    ('PLI00000010', 'CHU00000001', 'PLA00000001', 'PLI00000009', 1, 'item', NULL, 'Scripture Reading', 'Matthew 5:1-12 - The Beatitudes', 120),
-    ('PLI00000011', 'CHU00000001', 'PLA00000001', 'PLI00000009', 2, 'item', NULL, 'Sermon:', 'Pastor John - Living the Beatitudes', 1800),
+    ('PLI00000009', 'CHU00000001', 'PLA00000001', NULL, 3, 'header', NULL, 'Scripture and Sermon', '', 0, NULL),
+    ('PLI00000010', 'CHU00000001', 'PLA00000001', 'PLI00000009', 1, 'item', NULL, 'Scripture Reading', 'Matthew 5:1-12 - The Beatitudes', 120, 'https://www.biblegateway.com/passage/?search=Matthew%205:1-12&version=NIV'),
+    ('PLI00000011', 'CHU00000001', 'PLA00000001', 'PLI00000009', 2, 'item', NULL, 'Sermon:', 'Pastor John - Living the Beatitudes', 1800, 'https://example.com/sermon-notes/beatitudes'),
 
     -- Communion Section
-    ('PLI00000012', 'CHU00000001', 'PLA00000001', NULL, 4, 'header', NULL, 'Communion', '', 0),
-    ('PLI00000013', 'CHU00000001', 'PLA00000001', 'PLI00000012', 1, 'item', NULL, 'Communion Preparation', 'Pastor explains communion', 120),
-    ('PLI00000014', 'CHU00000001', 'PLA00000001', 'PLI00000012', 2, 'arrangementKey', 'ARK00000011', 'Amazing Grace', 'Key of G - during communion', 300),
-    ('PLI00000015', 'CHU00000001', 'PLA00000001', 'PLI00000012', 3, 'item', NULL, 'Communion Distribution', 'Deacons serve', 600),
+    ('PLI00000012', 'CHU00000001', 'PLA00000001', NULL, 4, 'header', NULL, 'Communion', '', 0, NULL),
+    ('PLI00000013', 'CHU00000001', 'PLA00000001', 'PLI00000012', 1, 'item', NULL, 'Communion Preparation', 'Pastor explains communion', 120, NULL),
+    ('PLI00000014', 'CHU00000001', 'PLA00000001', 'PLI00000012', 2, 'arrangementKey', 'ARK00000011', 'Amazing Grace', 'Key of G - during communion', 300, 'https://www.youtube.com/watch?v=CDdvReNKKuk'),
+    ('PLI00000015', 'CHU00000001', 'PLA00000001', 'PLI00000012', 3, 'item', NULL, 'Communion Distribution', 'Deacons serve', 600, NULL),
 
     -- Closing Section
-    ('PLI00000016', 'CHU00000001', 'PLA00000001', NULL, 5, 'header', NULL, 'Closing', '', 0),
-    ('PLI00000017', 'CHU00000001', 'PLA00000001', 'PLI00000016', 1, 'arrangementKey', 'ARK00000009', 'Graves Into Gardens', 'Key of F# - closing song', 365),
-    ('PLI00000018', 'CHU00000001', 'PLA00000001', 'PLI00000016', 2, 'item', NULL, 'Announcements', 'Weekly announcements', 180),
-    ('PLI00000019', 'CHU00000001', 'PLA00000001', 'PLI00000016', 3, 'item', NULL, 'Benediction', 'Pastor John gives blessing', 60),
-    ('PLI00000020', 'CHU00000001', 'PLA00000001', 'PLI00000016', 4, 'item', NULL, 'Postlude', 'Instrumental music as people leave', 300);
+    ('PLI00000016', 'CHU00000001', 'PLA00000001', NULL, 5, 'header', NULL, 'Closing', '', 0, NULL),
+    ('PLI00000017', 'CHU00000001', 'PLA00000001', 'PLI00000016', 1, 'arrangementKey', 'ARK00000009', 'Graves Into Gardens', 'Key of F# - closing song', 365, 'https://www.youtube.com/watch?v=37qjuS4zMpY'),
+    ('PLI00000018', 'CHU00000001', 'PLA00000001', 'PLI00000016', 2, 'item', NULL, 'Announcements', 'Weekly announcements', 180, 'https://example.com/weekly-announcements'),
+    ('PLI00000019', 'CHU00000001', 'PLA00000001', 'PLI00000016', 3, 'item', NULL, 'Benediction', 'Pastor John gives blessing', 60, NULL),
+    ('PLI00000020', 'CHU00000001', 'PLA00000001', 'PLI00000016', 4, 'item', NULL, 'Postlude', 'Instrumental music as people leave', 300, NULL);
 
 
     -- Create Assignments

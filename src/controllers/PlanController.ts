@@ -150,10 +150,13 @@ export class PlanController extends DoingBaseController {
   }
 
   @httpPost("/")
-  public async save(req: express.Request<{}, {}, Plan[]>, res: express.Response): Promise<any> {
+  public async save(req: express.Request<{}, {}, Plan[] | Plan>, res: express.Response): Promise<any> {
     return this.actionWrapper(req, res, async (au) => {
+      // Handle both single plan object and array of plans
+      const plans = Array.isArray(req.body) ? req.body : [req.body];
+      
       const promises: Promise<Plan>[] = [];
-      req.body.forEach((plan) => {
+      plans.forEach((plan) => {
         plan.churchId = au.churchId;
         if (plan.serviceDate) {
           plan.serviceDate = new Date(plan.serviceDate);
@@ -161,7 +164,9 @@ export class PlanController extends DoingBaseController {
         promises.push(this.repositories.plan.save(plan));
       });
       const result = await Promise.all(promises);
-      return result;
+      
+      // Return single object if input was single object, array if input was array
+      return Array.isArray(req.body) ? result : result[0];
     });
   }
 
